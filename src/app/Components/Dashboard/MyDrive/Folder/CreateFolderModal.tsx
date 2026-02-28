@@ -39,10 +39,13 @@ type CreateFolderFormValues = z.infer<typeof createFolderSchema>;
 
 interface CreateFolderModalProps {
   folders: any[];
-  onSuccess?: () => void;
+  parentId?: string | null;
 }
 
-export default function CreateFolderModal({ folders }: CreateFolderModalProps) {
+export default function CreateFolderModal({
+  folders,
+  parentId,
+}: CreateFolderModalProps) {
   const [open, setOpen] = useState(false);
   const [createFolder, { isLoading }] = useCreateFolderMutation();
 
@@ -64,7 +67,7 @@ export default function CreateFolderModal({ folders }: CreateFolderModalProps) {
     try {
       await createFolder({
         name: values.name.trim(),
-        parentId: values.parentId,
+        parentId: parentId ?? values.parentId,
       }).unwrap();
 
       toast.success("Folder created successfully!");

@@ -16,7 +16,7 @@ export const folderApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Folder"],
+      invalidatesTags: ["File", "Folder"],
     }),
 
     getFolders: builder.query<GetFoldersResponse, void>({
@@ -24,7 +24,7 @@ export const folderApi = baseApi.injectEndpoints({
         url: "/folders",
         method: "GET",
       }),
-      providesTags: ["Folder"],
+      providesTags: ["Folder", "File"],
     }),
 
     getFolderTree: builder.query<GetFolderTreeResponse, void>({
@@ -32,7 +32,7 @@ export const folderApi = baseApi.injectEndpoints({
         url: "/folders/tree",
         method: "GET",
       }),
-      providesTags: ["Folder"],
+      providesTags: ["Folder", "File"],
     }),
 
     getSingleFolder: builder.query<GetSingleFolderResponse, string>({
@@ -40,7 +40,7 @@ export const folderApi = baseApi.injectEndpoints({
         url: `/folders/${id}`,
         method: "GET",
       }),
-      providesTags: ["Folder"],
+      providesTags: ["Folder", "File"],
     }),
 
     updateFolder: builder.mutation<any, UpdateFolderPayload>({
@@ -49,7 +49,7 @@ export const folderApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["Folder"],
+      invalidatesTags: ["File", "Folder"],
     }),
 
     deleteFolder: builder.mutation<any, string>({
@@ -57,7 +57,7 @@ export const folderApi = baseApi.injectEndpoints({
         url: `/folders/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Folder"],
+      invalidatesTags: ["File", "Folder"],
     }),
   }),
 });
