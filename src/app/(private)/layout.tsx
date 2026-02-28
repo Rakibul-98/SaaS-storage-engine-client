@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAppSelector } from "../redux/hooks";
+import { SidebarProvider } from "../../components/ui/sidebar";
+import { AppSidebar } from "../../components/app-sidebar";
 
 export default function PrivateLayout({
   children,
@@ -24,10 +26,12 @@ export default function PrivateLayout({
   if (!accessToken) return null;
 
   return (
-    <div className="flex min-h-screen">
-      <div className="flex-1">
-        <main className="p-6">{children}</main>
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full">
+        <AppSidebar />
+        <main className="flex-1 p-6 w-full">{children}</main>
       </div>
-    </div>
+      <div></div>
+    </SidebarProvider>
   );
 }
