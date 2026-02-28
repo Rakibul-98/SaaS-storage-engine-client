@@ -1,6 +1,6 @@
 "use client";
 
-import { Monitor, TextSelect, Home } from "lucide-react";
+import { Home, HardDrive } from "lucide-react";
 
 import {
   Sidebar,
@@ -9,8 +9,10 @@ import {
 } from "@/components/ui/sidebar";
 import { NavMain } from "./nav-main";
 import Dashboard from "../app/Components/Dashboard/Dashboard/Dashboard";
+import { useGetFolderTreeQuery } from "../app/redux/features/folders/folderApi";
+import FolderTree from "../app/Components/Dashboard/AppSidebar/FolderTree";
 
-const data = {
+const navItems = {
   projects: [
     {
       name: "Dashboard",
@@ -26,36 +28,25 @@ const data = {
       url: "/",
     },
     {
-      title: "Drive",
-      url: "/my-drive",
-      icon: Monitor,
-      isActive: true,
-      items: [
-        { title: "Documents", url: "/front-office/reservation" },
-        {
-          title: "Reports",
-          url: "#",
-          icon: TextSelect,
-          items: [
-            {
-              title: "Trash Report",
-              url: "/front-office/report/airport-pickup-drop",
-            },
-            {
-              title: "Bill report",
-              url: "/front-office/report/bill-adjustment-report",
-            },
-          ],
-        },
-      ],
+      title: "My Drive",
+      icon: HardDrive,
+      url: "/dashboard/my-drive",
     },
   ],
 };
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data } = useGetFolderTreeQuery();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navItems.navMain} />
+        <div className="px-4">
+          <h4 className="text-xs font-semibold mb-2 text-muted-foreground">
+            All Folders
+          </h4>
+
+          {data?.data && <FolderTree folders={data.data} />}
+        </div>
       </SidebarContent>
 
       <SidebarFooter>
