@@ -1,5 +1,4 @@
-import React from "react";
-import Login from "../../Components/Authentication/Login";
+import { Login } from "../../Components/Authentication/Login";
 
 export default function LoginPage() {
   return (

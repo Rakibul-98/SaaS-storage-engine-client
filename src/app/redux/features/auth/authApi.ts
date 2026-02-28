@@ -28,8 +28,6 @@ export const authApi = baseApi.injectEndpoints({
           const { accessToken, refreshToken } = data.data;
 
           dispatch(setCredentials({ accessToken, refreshToken }));
-
-          document.cookie = `accessToken=${accessToken}; path=/`;
         } catch (err) {
           console.error("Login error:", err);
         }

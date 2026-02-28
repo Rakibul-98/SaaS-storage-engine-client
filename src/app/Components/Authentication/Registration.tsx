@@ -1,5 +1,141 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-export default function Registration() {
-  return <div>RegistrationPage</div>;
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { Loader2 } from "lucide-react";
+import { useRegisterMutation } from "../../redux/features/auth/authApi";
+import { MagicCard } from "../../../components/ui/magic-card";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { useTheme } from "next-themes";
+
+const registerSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+type RegisterFormValues = z.infer<typeof registerSchema>;
+
+export function Registration() {
+  const { theme } = useTheme();
+  const router = useRouter();
+  const [registerUser, { isLoading }] = useRegisterMutation();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = async (values: RegisterFormValues) => {
+    try {
+      const res = await registerUser(values).unwrap();
+
+      router.push("/");
+    } catch (error: any) {
+      setError("root", {
+        message: error?.data?.message || "Registration failed",
+      });
+    }
+  };
+
+  return (
+    <Card className="w-full max-w-sm mx-auto border-none p-0 shadow-none">
+      <MagicCard
+        gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"}
+        className="p-0"
+      >
+        <CardHeader className="border-border border-b p-4">
+          <CardTitle>Register</CardTitle>
+          <CardDescription>
+            Create your account to start using the platform
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="p-4">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid gap-4">
+              {/* Name */}
+              <div className="grid gap-2">
+                <Label htmlFor="name">Full Name</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Your full name"
+                  {...register("name")}
+                />
+                {errors.name && (
+                  <p className="text-sm text-red-500">{errors.name.message}</p>
+                )}
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  {...register("email")}
+                />
+                {errors.email && (
+                  <p className="text-sm text-red-500">{errors.email.message}</p>
+                )}
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  {...register("password")}
+                />
+                {errors.password && (
+                  <p className="text-sm text-red-500">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              {errors.root && (
+                <p className="text-sm text-red-500">{errors.root.message}</p>
+              )}
+            </div>
+
+            <Button type="submit" className="mt-4 w-full" disabled={isLoading}>
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Create Account
+            </Button>
+          </form>
+        </CardContent>
+
+        <CardFooter className="border-border border-t p-4 text-sm text-muted-foreground">
+          Already have an account?{" "}
+          <span
+            className="cursor-pointer font-medium text-primary underline hover:no-underline"
+            onClick={() => router.push("/login")}
+          >
+            Login
+          </span>
+        </CardFooter>
+      </MagicCard>
+    </Card>
+  );
 }

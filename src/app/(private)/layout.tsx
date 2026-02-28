@@ -9,19 +9,19 @@ export default function PrivateLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { token, user } = useAppSelector((state) => state.auth);
+  const { accessToken, user } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   useEffect(() => {
-    if (!token) {
-      router.replace("/login");
+    if (!accessToken) {
+      router.replace("/");
     }
     if (user?.role !== "ADMIN" && window.location.pathname.includes("/admin")) {
       router.replace("/dashboard");
     }
-  }, [token, router, user]);
+  }, [accessToken, router, user]);
 
-  if (!token) return null;
+  if (!accessToken) return null;
 
   return (
     <div className="flex min-h-screen">

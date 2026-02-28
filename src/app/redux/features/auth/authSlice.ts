@@ -1,39 +1,36 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
 import { AuthState } from "./auth.types";
 
 const initialState: AuthState = {
   user: null,
-  accessToken: null,
-  refreshToken: null,
+  accessToken:
+    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null,
+  refreshToken:
+    typeof window !== "undefined" ? localStorage.getItem("refreshToken") : null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setCredentials: (
-      state,
-      action: PayloadAction<{
-        accessToken: string;
-        refreshToken: string;
-      }>,
-    ) => {
+    setCredentials: (state, action) => {
       const { accessToken, refreshToken } = action.payload;
 
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
       state.user = jwtDecode(accessToken);
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
     },
 
     logout: (state) => {
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
-
-      if (typeof window !== "undefined") {
-        document.cookie = "accessToken=; path=/; max-age=0";
-      }
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
     },
   },
 });

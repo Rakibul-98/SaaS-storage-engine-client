@@ -1,12 +1,28 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+/* eslint-disable react-hooks/set-state-in-effect */
+"use client";
 
-export default async function HomePage() {
-  const token = (await cookies()).get("token");
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useAppSelector } from "./redux/hooks";
 
-  if (token) {
-    redirect("/dashboard");
-  } else {
-    redirect("/login");
-  }
+export default function HomePage() {
+  const router = useRouter();
+  const token = useAppSelector((state) => state.auth.accessToken);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    if (token) {
+      router.replace("/dashboard");
+    } else {
+      router.replace("/login");
+    }
+  }, [token, mounted, router]);
+
+  return null;
 }
