@@ -27,13 +27,7 @@ import {
 import { Label } from "../../../../../components/ui/label";
 import { Input } from "../../../../../components/ui/input";
 
-import {
-  FileIcon,
-  X,
-  Upload,
-  FileText,
-  Image as ImageIcon,
-} from "lucide-react";
+import { FileIcon, X, Upload } from "lucide-react";
 import { useUploadFileMutation } from "../../../../redux/features/files/fileApi";
 
 const uploadFileSchema = z.object({
@@ -145,16 +139,6 @@ export default function UploadFileModal({
     setFilePreview(null);
   };
 
-  const getFileIcon = (file: File) => {
-    if (file.type.startsWith("image/")) {
-      return <ImageIcon className="h-8 w-8 text-blue-500" />;
-    } else if (file.type.startsWith("text/")) {
-      return <FileText className="h-8 w-8 text-gray-500" />;
-    } else {
-      return <FileIcon className="h-8 w-8 text-gray-500" />;
-    }
-  };
-
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
@@ -240,7 +224,7 @@ export default function UploadFileModal({
               </div>
             ) : (
               <div className="border rounded-lg p-4">
-                <div className="flex items-start justify-between">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     {/* File Preview */}
                     {filePreview ? (
@@ -253,7 +237,7 @@ export default function UploadFileModal({
                         />
                       </div>
                     ) : (
-                      getFileIcon(selectedFile)
+                      <FileIcon className="h-8 w-8 text-gray-500" />
                     )}
 
                     <div className="flex-1 min-w-0">
@@ -268,7 +252,7 @@ export default function UploadFileModal({
 
                   <Button
                     type="button"
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
                     className="h-8 w-8"
                     onClick={clearSelectedFile}
@@ -286,10 +270,6 @@ export default function UploadFileModal({
               </p>
             )}
           </div>
-
-          {errors.folderId && (
-            <p className="text-sm text-red-500">{errors.folderId.message}</p>
-          )}
 
           <div className="flex justify-end gap-2 pt-4">
             <Button

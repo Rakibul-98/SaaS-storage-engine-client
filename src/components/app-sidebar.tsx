@@ -49,6 +49,11 @@ const navItems = {
       icon: PackageCheck,
       url: "/dashboard/subscriptions",
     },
+    {
+      title: "Manage Subscription",
+      icon: PackageCheck,
+      url: "/admin/manage-subscription",
+    },
   ],
 };
 
