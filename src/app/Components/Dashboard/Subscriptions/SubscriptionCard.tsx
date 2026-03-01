@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+
+import { toast } from "sonner";
+import { useCreateSubscriptionMutation } from "../../../redux/features/userSubscription/userSubscriptionApi";
 
 interface SubscriptionCardProps {
   pkg: any;
@@ -13,6 +18,20 @@ export default function SubscriptionCard({
   pkg,
   isActive,
 }: SubscriptionCardProps) {
+  const [createSubscription, { isLoading }] = useCreateSubscriptionMutation();
+
+  const handleUpgrade = async () => {
+    try {
+      await createSubscription({
+        subscriptionPackageId: pkg.id,
+      }).unwrap();
+
+      toast.success(`Successfully upgraded to ${pkg.name}`);
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to upgrade subscription");
+    }
+  };
+
   return (
     <Card
       className={`h-fit relative transition-all ${
@@ -22,9 +41,7 @@ export default function SubscriptionCard({
       {isActive && <Badge className="absolute top-3 right-3">Active</Badge>}
 
       <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          {pkg.name}
-        </CardTitle>
+        <CardTitle>{pkg.name}</CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-3 text-sm">
@@ -58,9 +75,10 @@ export default function SubscriptionCard({
         <Button
           className="w-full mt-4"
           variant={isActive ? "secondary" : "default"}
-          disabled={isActive}
+          disabled={isActive || isLoading}
+          onClick={handleUpgrade}
         >
-          {isActive ? "Current Plan" : "Upgrade"}
+          {isActive ? "Current Plan" : isLoading ? "Upgrading..." : "Upgrade"}
         </Button>
       </CardContent>
     </Card>

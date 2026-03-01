@@ -1,43 +1,56 @@
-import { Progress } from "../../../../components/ui/progress";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-export default function StatisticsCards() {
-  const userStatistics = [
+import { Card, CardContent } from "@/components/ui/card";
+import { File, Folder, HardDrive } from "lucide-react";
+
+export default function StatisticsCards({ stats }: any) {
+  const cards = [
     {
-      id: 1,
       title: "Files",
-      used: 24,
-      max: 100,
+      value: stats.totalFiles,
+      limit: stats.fileLimit,
+      icon: File,
     },
     {
-      id: 2,
       title: "Folders",
-      used: 7,
-      max: 10,
+      value: stats.totalFolders,
+      limit: stats.folderLimit,
+      icon: Folder,
     },
     {
-      id: 3,
-      title: "Storage",
-      used: 24.5,
-      max: 10,
-    },
-    {
-      id: 4,
-      title: "Files",
-      used: 24,
-      max: 100,
+      title: "Storage (MB)",
+      value: stats.totalStorageUsedMB,
+      limit: stats.storageLimitMB,
+      icon: HardDrive,
     },
   ];
+
   return (
-    <div className="grid grid-cols-2 gap-5">
-      {userStatistics.map((s, i) => (
-        <div key={i} className="bg-primary/10 p-3 rounded-md">
-          <p>{s.title} Used</p>
-          <h3>
-            <span>{s.used}</span>/{s.max}
-          </h3>
-          <Progress value={s.used} max={s.max} />
-        </div>
-      ))}
+    <div className="grid gap-6 md:grid-cols-3">
+      {cards.map((card, i) => {
+        const percent = Math.min((card.value / card.limit) * 100, 100);
+
+        const Icon = card.icon;
+
+        return (
+          <Card key={i} className="hover:shadow-md transition">
+            <CardContent className="p-6 flex justify-between items-center">
+              <div>
+                <p className="text-muted-foreground text-sm">{card.title}</p>
+                <h3 className="text-2xl font-bold">
+                  {card.value} / {card.limit}
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  {percent.toFixed(0)}% used
+                </p>
+              </div>
+
+              <Icon size={60} className="text-gray-600" />
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 }

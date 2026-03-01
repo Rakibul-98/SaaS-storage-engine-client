@@ -1,19 +1,56 @@
-import { Badge } from "../../../../components/ui/badge";
+"use client";
+
+import { Badge } from "@/components/ui/badge";
+
 import StatisticsCards from "./StatisticsCards";
+import { useGetMySubscriptionQuery } from "../../../redux/features/userSubscription/userSubscriptionApi";
+import { useGetDashboardStatisticsQuery } from "../../../redux/features/dashboard/dashboardApi";
+import { Alert, AlertDescription } from "../../../../components/ui/alert";
+import UsageCharts from "./UsageCharts";
+import SubscriptionCard from "../Subscriptions/SubscriptionCard";
+import { Button } from "../../../../components/ui/button";
+import Link from "next/link";
 
 export default function Dashboard() {
-  const username = "Rakibul Hasan";
-  const activePack = "Free";
+  const { data: subData } = useGetMySubscriptionQuery();
+  const { data: statsData, isLoading } = useGetDashboardStatisticsQuery();
+
+  if (isLoading) return <div className="p-6">Loading...</div>;
+
+  const stats = statsData?.data;
+  const currentPackage = subData?.data?.package;
+
+  const isOverLimit =
+    (stats?.foldersRemaining ?? 0) < 0 || (stats?.filesRemaining ?? 0) < 0;
+
   return (
-    <div>
-      <div className="flex justify-between items-center gap-5">
-        <h3>
-          Welcome back, <span>{username}</span>
-        </h3>
-        <Badge>{activePack}</Badge>
+    <div className="p-6 space-y-8">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-semibold">Dashboard</h2>
+
+        <Link href="/dashboard/subscriptions">
+          <Button className="cursor-pointer">Upgrade Plan</Button>
+        </Link>
       </div>
-      <StatisticsCards />
-      <div>charts</div>
+
+      {isOverLimit && (
+        <Alert variant="destructive">
+          <AlertDescription>
+            You have exceeded your subscription limits. Consider upgrading your
+            plan.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <StatisticsCards stats={stats} />
+
+      <div className="flex gap-5">
+        <UsageCharts stats={stats} />
+
+        {currentPackage && (
+          <SubscriptionCard pkg={currentPackage} isActive={true} />
+        )}
+      </div>
     </div>
   );
 }
