@@ -26,7 +26,7 @@ export default function DriveItem({
   onDoubleClick,
 }: DriveItemProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   // DOWNLOAD (file only)
   const handleDownload = async () => {
@@ -52,9 +52,15 @@ export default function DriveItem({
       a.click();
 
       window.URL.revokeObjectURL(url);
+      setDropdownOpen(false); // Close dropdown after download
     } catch {
       console.error("Download failed");
     }
+  };
+
+  const handleDeleteClick = () => {
+    setDeleteModalOpen(true);
+    setDropdownOpen(false); // Close dropdown when delete is clicked
   };
 
   return (
@@ -64,7 +70,7 @@ export default function DriveItem({
         className="border rounded-lg p-4 w-48 flex flex-col items-center gap-3 relative hover:shadow-md transition-shadow"
       >
         <div className="absolute top-2 right-2">
-          <DropdownMenu open={openDropdown} onOpenChange={setOpenDropdown}>
+          <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <button className="p-1 rounded hover:bg-gray-100">
                 <MoreVertical size={18} />
@@ -74,21 +80,28 @@ export default function DriveItem({
             <DropdownMenuContent align="end">
               {type === "folder" ? (
                 <>
-                  <DropdownMenuItem asChild>
-                    <UpdateFolderModal folder={item} />
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    <UpdateFolderModal
+                      folder={item}
+                      onClose={() => setDropdownOpen(false)}
+                    />
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
                     className="text-red-500 cursor-pointer"
-                    onClick={() => setDeleteModalOpen(true)}
+                    onSelect={(e) => e.preventDefault()}
+                    onClick={handleDeleteClick}
                   >
                     Delete
                   </DropdownMenuItem>
                 </>
               ) : (
                 <>
-                  <DropdownMenuItem onClick={handleDownload}>
-                    <p className="cursor-pointer">Download</p>
+                  <DropdownMenuItem
+                    onSelect={(e) => e.preventDefault()}
+                    onClick={handleDownload}
+                  >
+                    Download
                   </DropdownMenuItem>
 
                   <FileActions file={item} />

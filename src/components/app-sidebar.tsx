@@ -1,15 +1,22 @@
 "use client";
 
 import { Home, HardDrive, Trash, PackageCheck } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { NavMain } from "./nav-main";
 import Dashboard from "../app/Components/Dashboard/Dashboard/Dashboard";
 import { useGetFolderTreeQuery } from "../app/redux/features/folders/folderApi";
+import { logout } from "../app/redux/features/auth/authSlice";
+import { toast } from "sonner";
 import FolderTree from "../app/Components/Dashboard/AppSidebar/FolderTree";
 
 const navItems = {
@@ -44,8 +51,18 @@ const navItems = {
     },
   ],
 };
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data } = useGetFolderTreeQuery();
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success("Logged out successfully");
+    router.push("/login");
+  };
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>
@@ -60,7 +77,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter>
-        <h1>hi</h1>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={handleLogout}
+              className="bg-red-500 text-white font-medium w-full flex items-center justify-center hover:bg-red-400 rounded cursor-pointer"
+            >
+              <span>Sign Out</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );

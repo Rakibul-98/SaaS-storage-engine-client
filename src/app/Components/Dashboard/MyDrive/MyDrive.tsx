@@ -17,6 +17,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import UploadFileModal from "./File/UploadFileModal";
 
 export default function MyDrive() {
   const [folderStack, setFolderStack] = useState<
@@ -50,14 +51,21 @@ export default function MyDrive() {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Title + Create */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">My Drive</h1>
 
-        <CreateFolderModal
-          folders={rootData?.data || []}
-          parentId={currentFolderId}
-        />
+        <div className="flex gap-5">
+          {currentFolderId && (
+            <UploadFileModal
+              folders={rootData?.data || []}
+              parentId={currentFolderId}
+            />
+          )}
+          <CreateFolderModal
+            folders={rootData?.data || []}
+            parentId={currentFolderId}
+          />
+        </div>
       </div>
       <Breadcrumb>
         <BreadcrumbList>

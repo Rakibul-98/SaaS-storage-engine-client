@@ -1,7 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-
 import StatisticsCards from "./StatisticsCards";
 import { useGetMySubscriptionQuery } from "../../../redux/features/userSubscription/userSubscriptionApi";
 import { useGetDashboardStatisticsQuery } from "../../../redux/features/dashboard/dashboardApi";
@@ -10,6 +8,7 @@ import UsageCharts from "./UsageCharts";
 import SubscriptionCard from "../Subscriptions/SubscriptionCard";
 import { Button } from "../../../../components/ui/button";
 import Link from "next/link";
+import { jwtDecode } from "jwt-decode";
 
 export default function Dashboard() {
   const { data: subData } = useGetMySubscriptionQuery();
@@ -17,19 +16,23 @@ export default function Dashboard() {
 
   if (isLoading) return <div className="p-6">Loading...</div>;
 
+  const token = localStorage.getItem("accessToken");
+  const user = jwtDecode<{ name: string }>(token!);
+
   const stats = statsData?.data;
   const currentPackage = subData?.data?.package;
 
   const isOverLimit =
     (stats?.foldersRemaining ?? 0) < 0 || (stats?.filesRemaining ?? 0) < 0;
-
   return (
     <div className="p-6 space-y-8">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Dashboard</h2>
+        <h2 className="text-2xl font-semibold">Welcome back, {user?.name}</h2>
 
         <Link href="/dashboard/subscriptions">
-          <Button className="cursor-pointer">Upgrade Plan</Button>
+          <Button className="cursor-pointer">
+            {currentPackage ? "Upgrade Plan" : "Enroll Plan"}
+          </Button>
         </Link>
       </div>
 

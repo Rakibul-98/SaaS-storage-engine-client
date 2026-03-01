@@ -2,81 +2,98 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useUpdateFolderMutation } from "../../../../redux/features/folders/folderApi";
 import { toast } from "sonner";
 
+interface FormValues {
+  name: string;
+}
+
 interface UpdateFolderModalProps {
   folder: any;
-  onUpdateComplete?: () => void;
+  onClose?: () => void;
 }
 
 export default function UpdateFolderModal({
   folder,
-  onUpdateComplete,
+  onClose,
 }: UpdateFolderModalProps) {
-  const [name, setName] = useState(folder.name);
   const [open, setOpen] = useState(false);
   const [updateFolder, { isLoading }] = useUpdateFolderMutation();
 
-  const handleUpdate = async () => {
+  const { register, handleSubmit } = useForm<FormValues>({
+    defaultValues: { name: folder?.name || "" },
+  });
+
+  const onSubmit = async (data: FormValues) => {
     try {
       await updateFolder({
         id: folder.id,
-        name,
+        name: data.name,
       }).unwrap();
 
-      toast.success("Folder updated successfully!");
+      toast.success("Folder renamed successfully");
       setOpen(false);
-      if (onUpdateComplete) {
-        onUpdateComplete();
-      }
-    } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to update folder");
+      if (onClose) onClose();
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Rename failed");
     }
   };
 
   const handleOpenChange = (newOpen: boolean) => {
-    if (!newOpen) {
-      setName(folder.name);
-    }
     setOpen(newOpen);
+    if (!newOpen && onClose) {
+      onClose();
+    }
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <p className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded">
-          Edit
-        </p>
-      </DialogTrigger>
+    <>
+      <div
+        onClick={() => setOpen(true)}
+        className="w-full cursor-pointer py-1 hover:bg-gray-100 rounded"
+      >
+        Rename
+      </div>
 
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Rename Folder</DialogTitle>
-        </DialogHeader>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Rename Folder</DialogTitle>
+          </DialogHeader>
 
-        <div className="space-y-4">
-          <input
-            className="border p-2 w-full"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <Input
+              {...register("name", { required: "Name is required" })}
+              placeholder="Folder name"
+              autoFocus
+            />
 
-          <div className="flex justify-end">
-            <Button disabled={isLoading} onClick={handleUpdate}>
-              {isLoading ? "Saving..." : "Save"}
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleOpenChange(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? "Saving..." : "Save"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

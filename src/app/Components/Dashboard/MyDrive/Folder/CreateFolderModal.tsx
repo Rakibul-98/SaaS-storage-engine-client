@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -26,6 +26,7 @@ import {
 
 import { useCreateFolderMutation } from "../../../../redux/features/folders/folderApi";
 import { toast } from "sonner";
+import { Plus } from "lucide-react";
 
 const createFolderSchema = z.object({
   name: z
@@ -54,26 +55,31 @@ export default function CreateFolderModal({
     handleSubmit,
     reset,
     control,
+    setValue,
     formState: { errors, isDirty, isValid },
   } = useForm<CreateFolderFormValues>({
     resolver: zodResolver(createFolderSchema),
     defaultValues: {
       name: "",
-      parentId: null,
+      parentId: parentId || null,
     },
   });
+
+  useEffect(() => {
+    if (open) {
+      setValue("parentId", parentId || null);
+    }
+  }, [open, parentId, setValue]);
 
   const onSubmit = async (values: CreateFolderFormValues) => {
     try {
       await createFolder({
         name: values.name.trim(),
-        parentId: parentId ?? values.parentId,
+        parentId: parentId ?? values.parentId ?? undefined,
       }).unwrap();
 
       toast.success("Folder created successfully!");
-
       reset();
-
       setOpen(false);
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to create folder");
@@ -83,14 +89,23 @@ export default function CreateFolderModal({
   const handleOpenChange = (newOpen: boolean) => {
     if (!newOpen) {
       reset();
+    } else {
+      setValue("parentId", parentId || null);
     }
     setOpen(newOpen);
   };
 
+  const currentFolderName = parentId
+    ? folders.find((f) => f.id === parentId)?.name
+    : "Root Directory";
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button>Create Folder</Button>
+        <Button>
+          {" "}
+          <Plus /> New Folder
+        </Button>
       </DialogTrigger>
 
       <DialogContent>
@@ -114,7 +129,7 @@ export default function CreateFolderModal({
           </div>
 
           <div className="space-y-2 w-full">
-            <Label htmlFor="parentId">Parent Folder (Optional)</Label>
+            <Label htmlFor="parentId">Parent Folder</Label>
             <Controller
               name="parentId"
               control={control}
@@ -124,7 +139,7 @@ export default function CreateFolderModal({
                     field.onChange(value === "root" ? null : value)
                   }
                   value={field.value === null ? "root" : field.value}
-                  disabled={isLoading}
+                  disabled={true} // Always disabled since it's set dynamically
                 >
                   <SelectTrigger className="w-full" id="parentId">
                     <SelectValue placeholder="Select a parent folder" />
@@ -140,6 +155,9 @@ export default function CreateFolderModal({
                 </Select>
               )}
             />
+            <p className="text-sm text-muted-foreground mt-1 ms-1">
+              Folder will be created inside: {currentFolderName}
+            </p>
             {errors.parentId && (
               <p className="text-sm text-red-500">{errors.parentId.message}</p>
             )}

@@ -41,34 +41,34 @@ export default function SubscriptionCard({
       {isActive && <Badge className="absolute top-3 right-3">Active</Badge>}
 
       <CardHeader>
-        <CardTitle>{pkg.name}</CardTitle>
+        <CardTitle>{pkg?.name}</CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-3 text-sm">
         <ul className="space-y-2">
           <li className="flex items-start gap-2">
             <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-            <span>Max Folders: {pkg.maxFolders}</span>
+            <span>Max Folders: {pkg?.maxFolders}</span>
           </li>
           <li className="flex items-start gap-2">
             <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-            <span>Max Nesting: {pkg.maxLevels}</span>
+            <span>Max Nesting: {pkg?.maxLevels}</span>
           </li>
           <li className="flex items-start gap-2">
             <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-            <span>File Limit: {pkg.fileLimit}</span>
+            <span>File Limit: {pkg?.fileLimit}</span>
           </li>
           <li className="flex items-start gap-2">
             <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-            <span>Files / Folder: {pkg.filesPerFolder}</span>
+            <span>Files / Folder: {pkg?.filesPerFolder}</span>
           </li>
           <li className="flex items-start gap-2">
             <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-            <span>Max File Size: {pkg.maxFileSizeMB} MB</span>
+            <span>Max File Size: {pkg?.maxFileSizeMB} MB</span>
           </li>
           <li className="flex items-start gap-2">
             <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-            <span>Allowed Types: {pkg.allowedFileType?.join(", ")}</span>
+            <span>Allowed Types: {pkg?.allowedFileType?.join(", ")}</span>
           </li>
         </ul>
 

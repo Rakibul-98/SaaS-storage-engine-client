@@ -8,20 +8,20 @@ export default function StatisticsCards({ stats }: any) {
   const cards = [
     {
       title: "Files",
-      value: stats.totalFiles,
-      limit: stats.fileLimit,
+      value: stats?.totalFiles,
+      limit: stats?.fileLimit,
       icon: File,
     },
     {
       title: "Folders",
-      value: stats.totalFolders,
-      limit: stats.folderLimit,
+      value: stats?.totalFolders,
+      limit: stats?.folderLimit,
       icon: Folder,
     },
     {
       title: "Storage (MB)",
-      value: stats.totalStorageUsedMB,
-      limit: stats.storageLimitMB,
+      value: stats?.totalStorageUsedMB,
+      limit: stats?.storageLimitMB,
       icon: HardDrive,
     },
   ];
