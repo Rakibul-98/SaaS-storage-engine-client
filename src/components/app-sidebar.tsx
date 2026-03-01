@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, HardDrive } from "lucide-react";
+import { Home, HardDrive, Trash } from "lucide-react";
 
 import {
   Sidebar,
@@ -31,6 +31,11 @@ const navItems = {
       title: "My Drive",
       icon: HardDrive,
       url: "/dashboard/my-drive",
+    },
+    {
+      title: "Trashed",
+      icon: Trash,
+      url: "/dashboard/trash",
     },
   ],
 };
