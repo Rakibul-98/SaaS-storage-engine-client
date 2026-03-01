@@ -16,6 +16,6 @@ export const baseApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["User", "Folder", "File", "Subscription"],
+  tagTypes: ["User", "Folder", "File", "Subscription", "UserSubscription"],
   endpoints: () => ({}),
 });
