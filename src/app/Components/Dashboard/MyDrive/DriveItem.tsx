@@ -28,7 +28,10 @@ export default function DriveItem({
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // DOWNLOAD (file only)
+  const closeDropdown = () => {
+    setDropdownOpen(false);
+  };
+
   const handleDownload = async () => {
     try {
       const response = await fetch(
@@ -52,7 +55,7 @@ export default function DriveItem({
       a.click();
 
       window.URL.revokeObjectURL(url);
-      setDropdownOpen(false); // Close dropdown after download
+      closeDropdown();
     } catch {
       console.error("Download failed");
     }
@@ -60,7 +63,7 @@ export default function DriveItem({
 
   const handleDeleteClick = () => {
     setDeleteModalOpen(true);
-    setDropdownOpen(false); // Close dropdown when delete is clicked
+    closeDropdown();
   };
 
   return (
@@ -81,10 +84,7 @@ export default function DriveItem({
               {type === "folder" ? (
                 <>
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    <UpdateFolderModal
-                      folder={item}
-                      onClose={() => setDropdownOpen(false)}
-                    />
+                    <UpdateFolderModal folder={item} onClose={closeDropdown} />
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
@@ -104,7 +104,7 @@ export default function DriveItem({
                     Download
                   </DropdownMenuItem>
 
-                  <FileActions file={item} />
+                  <FileActions file={item} onClose={closeDropdown} />
                 </>
               )}
             </DropdownMenuContent>
@@ -123,7 +123,10 @@ export default function DriveItem({
       {type === "folder" && (
         <DeleteFolderConfirmation
           open={deleteModalOpen}
-          onClose={() => setDeleteModalOpen(false)}
+          onClose={() => {
+            setDeleteModalOpen(false);
+            closeDropdown();
+          }}
           folder={item}
         />
       )}

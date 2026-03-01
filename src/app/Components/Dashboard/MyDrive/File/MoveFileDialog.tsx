@@ -22,7 +22,12 @@ import { useGetFoldersQuery } from "../../../../redux/features/folders/folderApi
 import { useUpdateFileMutation } from "../../../../redux/features/files/fileApi";
 import { toast } from "sonner";
 
-export default function MoveFileDialog({ file }: any) {
+interface MoveFileDialogProps {
+  file: any;
+  onClose: () => void;
+}
+
+export default function MoveFileDialog({ file, onClose }: MoveFileDialogProps) {
   const [open, setOpen] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
 
@@ -40,6 +45,7 @@ export default function MoveFileDialog({ file }: any) {
 
       toast.success("File moved");
       setOpen(false);
+      onClose();
     } catch (err: any) {
       toast.error(err?.data?.message || "Move failed");
     }
@@ -47,7 +53,12 @@ export default function MoveFileDialog({ file }: any) {
 
   return (
     <>
-      <p className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded">Move</p>
+      <p
+        onClick={() => setOpen(true)}
+        className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+      >
+        Move
+      </p>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
@@ -56,7 +67,7 @@ export default function MoveFileDialog({ file }: any) {
           </DialogHeader>
 
           <Select onValueChange={(value) => setSelectedFolder(value)}>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Select Folder" />
             </SelectTrigger>
 
@@ -71,7 +82,7 @@ export default function MoveFileDialog({ file }: any) {
 
           <DialogFooter>
             <Button onClick={handleMove} disabled={isLoading}>
-              Move
+              {isLoading ? "Moving..." : "Move"}
             </Button>
           </DialogFooter>
         </DialogContent>

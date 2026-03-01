@@ -4,15 +4,20 @@ import RenameFileDialog from "./RenameFileDialog";
 import MoveFileDialog from "./MoveFileDialog";
 import DeleteFileDialog from "./DeleteFileDialog";
 
-export default function FileActions({ file }: any) {
+interface FileActionsProps {
+  file: any;
+  onClose: () => void;
+}
+
+export default function FileActions({ file, onClose }: FileActionsProps) {
   return (
     <>
       <DropdownMenuItem asChild>
-        <RenameFileDialog file={file} />
+        <RenameFileDialog file={file} onClose={onClose} />
       </DropdownMenuItem>
 
       <DropdownMenuItem asChild>
-        <MoveFileDialog file={file} />
+        <MoveFileDialog file={file} onClose={onClose} />
       </DropdownMenuItem>
 
       <DropdownMenuItem asChild>

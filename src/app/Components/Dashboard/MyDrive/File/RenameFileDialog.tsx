@@ -19,7 +19,15 @@ interface FormValues {
   name: string;
 }
 
-export default function RenameFileDialog({ file }: any) {
+interface RenameFileDialogProps {
+  file: any;
+  onClose: () => void;
+}
+
+export default function RenameFileDialog({
+  file,
+  onClose,
+}: RenameFileDialogProps) {
   const [open, setOpen] = useState(false);
   const [updateFile, { isLoading }] = useUpdateFileMutation();
 
@@ -36,6 +44,7 @@ export default function RenameFileDialog({ file }: any) {
 
       toast.success("File renamed");
       setOpen(false);
+      onClose();
       reset({ name: data.name });
     } catch (err: any) {
       toast.error(err?.data?.message || "Rename failed");
@@ -44,9 +53,12 @@ export default function RenameFileDialog({ file }: any) {
 
   return (
     <>
-      <p className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded">
+      <div
+        onClick={() => setOpen(true)}
+        className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+      >
         Rename
-      </p>
+      </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
