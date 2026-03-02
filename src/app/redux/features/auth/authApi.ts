@@ -47,7 +47,20 @@ export const authApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    verifyEmail: builder.mutation<
+      {
+        success: boolean;
+        message: string;
+      },
+      { token: string }
+    >({
+      query: ({ token }) => ({
+        url: `/auth/verify-email?token=${token}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation, useVerifyEmailMutation } =
+  authApi;

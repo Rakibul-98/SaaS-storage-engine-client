@@ -107,7 +107,16 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 <FormItem>
                   <FormLabel>Package Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter package name" {...field} />
+                    <Input
+                      placeholder="Enter package name"
+                      {...field}
+                      readOnly={mode === "edit"}
+                      className={
+                        mode === "edit"
+                          ? "bg-gray-100 focus-visible:ring-0 focus-visible:ring-offset-0 cursor-default"
+                          : ""
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
