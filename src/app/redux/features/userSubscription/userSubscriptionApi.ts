@@ -25,7 +25,7 @@ export const userSubscriptionApi = baseApi.injectEndpoints({
         url: "/user-subscriptions/me",
         method: "GET",
       }),
-      providesTags: ["UserSubscription"],
+      providesTags: ["UserSubscription", "Subscription", "Dashboard"],
     }),
 
     getMySubscriptionHistory: builder.query<SubscriptionHistoryResponse, void>({
@@ -33,7 +33,7 @@ export const userSubscriptionApi = baseApi.injectEndpoints({
         url: "/user-subscriptions/history",
         method: "GET",
       }),
-      providesTags: ["UserSubscription"],
+      providesTags: ["UserSubscription", "Subscription", "Dashboard"],
     }),
   }),
 });

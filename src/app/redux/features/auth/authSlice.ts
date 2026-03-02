@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
 import { AuthState } from "./auth.types";
+import { baseApi } from "../../api/baseApi";
 
 const initialState: AuthState = {
   user: null,
@@ -31,6 +32,7 @@ const authSlice = createSlice({
       state.refreshToken = null;
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      baseApi.util.resetApiState();
     },
   },
 });

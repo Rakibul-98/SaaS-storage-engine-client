@@ -33,6 +33,7 @@ export interface RegisterResponse {
 export interface DecodedUser {
   id: string;
   email: string;
+  name?: string;
   role: "USER" | "ADMIN";
   iat: number;
   exp: number;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -20,6 +21,7 @@ import { MagicCard } from "../../../components/ui/magic-card";
 import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
 import { useTheme } from "next-themes";
+import { toast } from "sonner";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -38,7 +40,6 @@ export function Registration() {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
   });
@@ -46,12 +47,12 @@ export function Registration() {
   const onSubmit = async (values: RegisterFormValues) => {
     try {
       await registerUser(values).unwrap();
-
-      router.push("/");
+      toast.success("Registration successful. Veriy email to continue.");
+      setTimeout(() => {
+        router.push("/login");
+      }, 3000);
     } catch (error: any) {
-      setError("root", {
-        message: error?.data?.message || "Registration failed",
-      });
+      toast.error("Registration failed.");
     }
   };
 

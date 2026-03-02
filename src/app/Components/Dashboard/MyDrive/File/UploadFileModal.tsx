@@ -1,9 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/incompatible-library */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
@@ -17,56 +17,54 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../../../../components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../../../components/ui/select";
 import { Label } from "../../../../../components/ui/label";
 import { Input } from "../../../../../components/ui/input";
 
 import { FileIcon, X, Upload } from "lucide-react";
 import { useUploadFileMutation } from "../../../../redux/features/files/fileApi";
+import { useGetMySubscriptionQuery } from "../../../../redux/features/userSubscription/userSubscriptionApi";
 
-const uploadFileSchema = z.object({
-  folderId: z.string().nullable(),
-  file: z
-    .any()
-    .refine((file) => file instanceof File, "Please select a file")
-    .refine(
-      (file) => file?.size <= 10 * 1024 * 1024,
-      "File size must be less than 10MB",
-    ),
-});
+const createFileSchema = (maxFileSizeMB: number) => {
+  const maxSizeBytes = maxFileSizeMB * 1024 * 1024;
 
-type UploadFileFormValues = z.infer<typeof uploadFileSchema>;
+  return z.object({
+    file: z
+      .any()
+      .refine((file) => file instanceof File, "Please select a file")
+      .refine(
+        (file) => file?.size <= maxSizeBytes,
+        `File size must be less than ${maxFileSizeMB}MB`,
+      ),
+  });
+};
+
+type UploadFileFormValues = z.infer<ReturnType<typeof createFileSchema>>;
 
 interface UploadFileModalProps {
   folders: any[];
   parentId?: string | null;
 }
 
-export default function UploadFileModal({
-  folders,
-  parentId,
-}: UploadFileModalProps) {
+export default function UploadFileModal({ parentId }: UploadFileModalProps) {
   const [open, setOpen] = useState(false);
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const [uploadFile, { isLoading }] = useUploadFileMutation();
+  const { data: subData } = useGetMySubscriptionQuery();
+
+  const currentPackage = subData?.data?.package;
+  const maxFileSizeMB = currentPackage?.maxFileSizeMB || 10;
+
+  const schema = createFileSchema(maxFileSizeMB);
 
   const {
     handleSubmit,
     reset,
-    control,
     setValue,
     watch,
     formState: { errors, isDirty, isValid },
   } = useForm<UploadFileFormValues>({
-    resolver: zodResolver(uploadFileSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
-      folderId: parentId || null,
       file: undefined,
     },
   });
@@ -74,35 +72,23 @@ export default function UploadFileModal({
   const selectedFile = watch("file");
 
   useEffect(() => {
-    if (open) {
-      setValue("folderId", parentId || null);
-    }
-  }, [open, parentId, setValue]);
+    if (
+      selectedFile instanceof File &&
+      selectedFile.type.startsWith("image/")
+    ) {
+      const previewUrl = URL.createObjectURL(selectedFile);
+      setFilePreview(previewUrl);
 
-  useEffect(() => {
-    if (selectedFile instanceof File) {
-      if (selectedFile.type.startsWith("image/")) {
-        const previewUrl = URL.createObjectURL(selectedFile);
-        setFilePreview(previewUrl);
-
-        return () => {
-          if (filePreview) {
-            URL.revokeObjectURL(filePreview);
-          }
-        };
-      } else {
-        setFilePreview(null);
-      }
-    } else {
-      setFilePreview(null);
+      return () => URL.revokeObjectURL(previewUrl);
     }
+    setFilePreview(null);
   }, [selectedFile]);
 
   const onSubmit = async (values: UploadFileFormValues) => {
     try {
       await uploadFile({
         file: values.file,
-        folderId: values.folderId || "",
+        folderId: parentId || "",
       }).unwrap();
 
       toast.success("File uploaded successfully!");
@@ -121,8 +107,6 @@ export default function UploadFileModal({
   const handleOpenChange = (newOpen: boolean) => {
     if (!newOpen) {
       handleClose();
-    } else {
-      setValue("folderId", parentId || null);
     }
     setOpen(newOpen);
   };
@@ -147,15 +131,11 @@ export default function UploadFileModal({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  const currentFolderName = parentId
-    ? folders.find((f) => f.id === parentId)?.name
-    : "Root Directory";
-
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <Upload /> Upload File
+          <Upload className="h-4 w-4 mr-2" /> Upload File
         </Button>
       </DialogTrigger>
 
@@ -165,38 +145,6 @@ export default function UploadFileModal({
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="folderId">Upload to Folder</Label>
-            <Controller
-              name="folderId"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  onValueChange={(value) =>
-                    field.onChange(value === "root" ? null : value)
-                  }
-                  value={field.value === null ? "root" : field.value}
-                  disabled={true}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select folder" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="root">Root Directory</SelectItem>
-                    {folders.map((folder: any) => (
-                      <SelectItem key={folder.id} value={folder.id}>
-                        {folder.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-            <p className="text-sm text-muted-foreground">
-              Uploading to: {currentFolderName}
-            </p>
-          </div>
-
           <div className="space-y-2">
             <Label>Select File</Label>
 
@@ -218,7 +166,7 @@ export default function UploadFileModal({
                     Click to select or drag and drop
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    Maximum file size: 10MB
+                    Maximum file size: {maxFileSizeMB}MB
                   </span>
                 </Label>
               </div>
@@ -237,7 +185,7 @@ export default function UploadFileModal({
                         />
                       </div>
                     ) : (
-                      <FileIcon className="h-8 w-8 text-gray-500" />
+                      <FileIcon className="h-8 w-8 text-muted-foreground" />
                     )}
 
                     <div className="flex-1 min-w-0">
@@ -245,14 +193,15 @@ export default function UploadFileModal({
                         {selectedFile.name}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {formatFileSize(selectedFile.size)}
+                        {formatFileSize(selectedFile.size)} / {maxFileSizeMB}MB
+                        max
                       </p>
                     </div>
                   </div>
 
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="ghost"
                     size="icon"
                     className="h-8 w-8"
                     onClick={clearSelectedFile}
@@ -280,14 +229,21 @@ export default function UploadFileModal({
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading || !isDirty || !isValid}>
+            <Button
+              type="submit"
+              disabled={isLoading || !isDirty || !isValid}
+              className="min-w-25"
+            >
               {isLoading ? (
-                <>Uploading...</>
+                <span className="flex items-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  Uploading...
+                </span>
               ) : (
-                <>
-                  <Upload className="h-4 w-4 mr-2" />
+                <span className="flex items-center gap-2">
+                  <Upload className="h-4 w-4" />
                   Upload File
-                </>
+                </span>
               )}
             </Button>
           </div>

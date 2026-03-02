@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
@@ -34,8 +40,10 @@ export default function SubscriptionCard({
 
   return (
     <Card
-      className={`h-fit relative transition-all ${
-        isActive ? "border-primary shadow-lg scale-[1.02]" : "hover:shadow-md"
+      className={`relative flex flex-col h-full transition-all ${
+        isActive
+          ? "border-primary bg-blue-500/5 shadow-lg scale-[1.05]"
+          : "hover:shadow-md"
       }`}
     >
       {isActive && <Badge className="absolute top-3 right-3">Active</Badge>}
@@ -44,7 +52,7 @@ export default function SubscriptionCard({
         <CardTitle>{pkg?.name}</CardTitle>
       </CardHeader>
 
-      <CardContent className="space-y-3 text-sm">
+      <CardContent className="flex-1 space-y-3 text-sm">
         <ul className="space-y-2">
           <li className="flex items-start gap-2">
             <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
@@ -60,7 +68,7 @@ export default function SubscriptionCard({
           </li>
           <li className="flex items-start gap-2">
             <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-            <span>Files / Folder: {pkg?.filesPerFolder}</span>
+            <span>Files per Folder: {pkg?.filesPerFolder}</span>
           </li>
           <li className="flex items-start gap-2">
             <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
@@ -71,16 +79,18 @@ export default function SubscriptionCard({
             <span>Allowed Types: {pkg?.allowedFileType?.join(", ")}</span>
           </li>
         </ul>
+      </CardContent>
 
+      <CardFooter>
         <Button
-          className="w-full mt-4"
+          className="w-full"
           variant={isActive ? "secondary" : "default"}
           disabled={isActive || isLoading}
           onClick={handleUpgrade}
         >
           {isActive ? "Current Plan" : isLoading ? "Upgrading..." : "Upgrade"}
         </Button>
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 }

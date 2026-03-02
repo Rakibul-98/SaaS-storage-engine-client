@@ -12,10 +12,11 @@ import { jwtDecode } from "jwt-decode";
 import DashboardSkeleton from "./DashboardSkeleton";
 
 export default function Dashboard() {
-  const { data: subData } = useGetMySubscriptionQuery();
-  const { data: statsData, isLoading } = useGetDashboardStatisticsQuery();
+  const { data: subData, isLoading: subLoading } = useGetMySubscriptionQuery();
+  const { data: statsData, isLoading: statsLoading } =
+    useGetDashboardStatisticsQuery();
 
-  if (isLoading) return <DashboardSkeleton />;
+  if (subLoading || statsLoading) return <DashboardSkeleton />;
 
   const token = localStorage.getItem("accessToken");
   const user = jwtDecode<{ name: string }>(token!);
