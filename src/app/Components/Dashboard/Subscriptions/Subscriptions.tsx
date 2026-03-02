@@ -6,6 +6,7 @@ import SubscriptionCard from "./SubscriptionCard";
 
 import { useGetMySubscriptionQuery } from "../../../redux/features/userSubscription/userSubscriptionApi";
 import { useGetAllPackagesQuery } from "../../../redux/features/subscription/subscriptionApi";
+import SubscriptionsSkeleton from "./SubscriptionsSkeleton";
 
 export default function Subscriptions() {
   const { data: mySubData, isLoading: subLoading } =
@@ -17,7 +18,7 @@ export default function Subscriptions() {
   const packages = packagesData?.data || [];
 
   if (subLoading || pkgLoading) {
-    return <div className="p-6">Loading...</div>;
+    return <SubscriptionsSkeleton />;
   }
 
   return (

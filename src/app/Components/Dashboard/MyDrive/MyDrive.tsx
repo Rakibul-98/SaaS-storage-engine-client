@@ -18,6 +18,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import UploadFileModal from "./File/UploadFileModal";
+import MyDriveSkeleton from "./MyDriveSkeleton";
 
 export default function MyDrive() {
   const [folderStack, setFolderStack] = useState<
@@ -47,7 +48,7 @@ export default function MyDrive() {
 
   const files = currentFolderId ? singleFolderData?.data?.files || [] : [];
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <MyDriveSkeleton />;
 
   return (
     <div className="p-6 space-y-6">

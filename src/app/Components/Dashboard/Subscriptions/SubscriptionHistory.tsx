@@ -12,6 +12,7 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { useGetMySubscriptionHistoryQuery } from "../../../redux/features/userSubscription/userSubscriptionApi";
+import SubscriptionHistorySkeleton from "./SubscriptionHistorySkeleton";
 
 export default function SubscriptionHistory() {
   const { data, isLoading } = useGetMySubscriptionHistoryQuery();
@@ -19,7 +20,7 @@ export default function SubscriptionHistory() {
   const history = data?.data || [];
 
   if (isLoading) {
-    return <div className="p-6">Loading...</div>;
+    return <SubscriptionHistorySkeleton />;
   }
 
   return (

@@ -15,6 +15,7 @@ import {
 import SubscriptionTable from "./SubscriptionTable";
 import SubscriptionModal from "./SubscriptionModal";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import TrashSkeleton from "../../Trash/TrashSkeleton";
 
 export default function ManageSubscriptions() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -102,11 +103,7 @@ export default function ManageSubscriptions() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <TrashSkeleton />;
   }
 
   return (

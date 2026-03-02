@@ -30,6 +30,7 @@ import {
 } from "../../../redux/features/files/fileApi";
 import { File } from "lucide-react";
 import { toast } from "sonner";
+import TrashSkeleton from "./TrashSkeleton";
 
 export default function Trash() {
   const { data, isLoading } = useGetTrashFilesQuery();
@@ -63,7 +64,7 @@ export default function Trash() {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <TrashSkeleton />;
 
   return (
     <div className="p-6 space-y-6">

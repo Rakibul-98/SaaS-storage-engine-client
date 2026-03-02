@@ -9,12 +9,13 @@ import SubscriptionCard from "../Subscriptions/SubscriptionCard";
 import { Button } from "../../../../components/ui/button";
 import Link from "next/link";
 import { jwtDecode } from "jwt-decode";
+import DashboardSkeleton from "./DashboardSkeleton";
 
 export default function Dashboard() {
   const { data: subData } = useGetMySubscriptionQuery();
   const { data: statsData, isLoading } = useGetDashboardStatisticsQuery();
 
-  if (isLoading) return <div className="p-6">Loading...</div>;
+  if (isLoading) return <DashboardSkeleton />;
 
   const token = localStorage.getItem("accessToken");
   const user = jwtDecode<{ name: string }>(token!);
