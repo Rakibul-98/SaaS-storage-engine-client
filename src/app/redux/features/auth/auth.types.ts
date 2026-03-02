@@ -43,3 +43,12 @@ export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
 }
+
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  newPassword: string;
+}

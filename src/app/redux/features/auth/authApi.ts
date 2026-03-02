@@ -1,5 +1,10 @@
 import { baseApi } from "../../api/baseApi";
-import { LoginPayload, RegisterPayload } from "./auth.types";
+import {
+  ForgotPasswordPayload,
+  LoginPayload,
+  RegisterPayload,
+  ResetPasswordPayload,
+} from "./auth.types";
 import { setCredentials } from "./authSlice";
 
 export const authApi = baseApi.injectEndpoints({
@@ -59,8 +64,40 @@ export const authApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    forgotPassword: builder.mutation<
+      {
+        success: boolean;
+        message: string;
+      },
+      ForgotPasswordPayload
+    >({
+      query: (data) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    resetPassword: builder.mutation<
+      {
+        success: boolean;
+        message: string;
+      },
+      ResetPasswordPayload
+    >({
+      query: (data) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useVerifyEmailMutation } =
-  authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useVerifyEmailMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+} = authApi;

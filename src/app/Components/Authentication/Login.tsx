@@ -10,10 +10,8 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 
 import { Loader2 } from "lucide-react";
@@ -23,6 +21,7 @@ import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -72,10 +71,12 @@ export function Login() {
         className="p-0"
       >
         <CardHeader className="border-border border-b p-4">
-          <CardTitle>Login</CardTitle>
-          <CardDescription>
-            Enter your credentials to access your account
-          </CardDescription>
+          <div>
+            <h2 className="text-center text-3xl font-extrabold ">Login</h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              Enter your credentials to access your account
+            </p>
+          </div>
         </CardHeader>
 
         <CardContent className="p-4">
@@ -121,7 +122,10 @@ export function Login() {
           </form>
         </CardContent>
 
-        <CardFooter className="border-border border-t p-4 text-sm text-muted-foreground flex">
+        <CardFooter className="relative border-border border-t p-4 text-sm text-muted-foreground flex">
+          <Link className="absolute top-1 right-2" href="/forgot-password">
+            Forgot your Password?
+          </Link>
           Don’t have an account?{" "}
           <span
             className="cursor-pointer font-medium text-primary underline hover:no-underline"

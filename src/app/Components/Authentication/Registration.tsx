@@ -10,10 +10,8 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 
 import { Loader2 } from "lucide-react";
@@ -47,7 +45,7 @@ export function Registration() {
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
-      const res = await registerUser(values).unwrap();
+      await registerUser(values).unwrap();
 
       router.push("/");
     } catch (error: any) {
@@ -64,10 +62,12 @@ export function Registration() {
         className="p-0"
       >
         <CardHeader className="border-border border-b p-4">
-          <CardTitle>Register</CardTitle>
-          <CardDescription>
-            Create your account to start using the platform
-          </CardDescription>
+          <div>
+            <h2 className="text-center text-3xl font-extrabold ">Register</h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              Create your account to start using the platform
+            </p>
+          </div>
         </CardHeader>
 
         <CardContent className="p-4">
