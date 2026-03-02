@@ -21,6 +21,8 @@ export default function Dashboard() {
   const token = localStorage.getItem("accessToken");
   const user = jwtDecode<{ name: string }>(token!);
 
+  console.log(user);
+
   const stats = statsData?.data;
   const currentPackage = subData?.data?.package;
 
@@ -49,7 +51,7 @@ export default function Dashboard() {
 
       <StatisticsCards stats={stats} />
 
-      <div className="flex gap-5">
+      <div className="flex flex-col lg:flex-row gap-8">
         <UsageCharts stats={stats} />
 
         {currentPackage && (

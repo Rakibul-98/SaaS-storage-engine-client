@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
@@ -6,13 +7,14 @@ import { useAppSelector } from "../redux/hooks";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "../../components/app-sidebar";
 import { toast } from "sonner";
+import { jwtDecode } from "jwt-decode";
 
 export default function PrivateLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { accessToken, user } = useAppSelector((state) => state.auth);
+  const { accessToken } = useAppSelector((state) => state.auth);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -22,13 +24,29 @@ export default function PrivateLayout({
       return;
     }
 
-    if (pathname.includes("/admin") && user?.role !== "ADMIN") {
-      router.replace("/dashboard");
-      toast.error("You don't have permission to access this page");
+    try {
+      const user = jwtDecode<{ name: string; role: string }>(accessToken);
+
+      if (pathname.includes("/admin") && user?.role !== "ADMIN") {
+        router.replace("/dashboard");
+        toast.error("You don't have permission to access this page");
+      }
+    } catch (error) {
+      console.error("Invalid token:", error);
+      router.replace("/");
+      toast.error("Session expired. Please login again.");
     }
-  }, [accessToken, router, user, pathname]);
+  }, [accessToken, router, pathname]);
 
   if (!accessToken) return null;
+
+  let user;
+  try {
+    user = jwtDecode<{ name: string; role: string }>(accessToken);
+  } catch (error) {
+    router.replace("/");
+    return null;
+  }
 
   if (pathname.includes("/admin") && user?.role !== "ADMIN") {
     return null;

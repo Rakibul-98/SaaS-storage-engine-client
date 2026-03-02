@@ -3,7 +3,7 @@
 
 import { ChevronRight, ChevronDown, Folder } from "lucide-react";
 import { useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 interface FolderNode {
@@ -24,7 +24,7 @@ export default function FolderTree({
   isCollapsed = false,
 }: FolderTreeProps) {
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
-  const router = useRouter();
+  // const router = useRouter();
   const pathname = usePathname();
 
   const toggleFolder = (id: string, e: React.MouseEvent) => {
@@ -35,18 +35,17 @@ export default function FolderTree({
     }));
   };
 
-  const handleFolderClick = (folderId: string) => {
-    router.push(`/dashboard/folder/${folderId}`);
-  };
+  // const handleFolderClick = (folderId: string) => {
+  //   router.push(`/dashboard/folder/${folderId}`);
+  // };
 
-  // If collapsed, show only icons
   if (isCollapsed) {
     return (
       <div className="flex flex-col items-center gap-1 py-2">
         {folders.map((folder) => (
           <button
             key={folder.id}
-            onClick={() => handleFolderClick(folder.id)}
+            // onClick={() => handleFolderClick(folder.id)}
             className={cn(
               "p-2 rounded-md transition-colors relative group",
               pathname.includes(folder.id)
@@ -82,7 +81,7 @@ export default function FolderTree({
                   : "hover:bg-accent hover:text-accent-foreground",
               )}
               style={{ paddingLeft: `${level * 12 + 8}px` }}
-              onClick={() => handleFolderClick(folder.id)}
+              // onClick={() => handleFolderClick(folder.id)}
             >
               {hasChildren ? (
                 <button

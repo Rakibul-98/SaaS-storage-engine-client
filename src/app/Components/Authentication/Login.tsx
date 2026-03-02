@@ -51,11 +51,9 @@ export function Login() {
   const onSubmit = async (values: LoginFormValues) => {
     try {
       const res = await login(values).unwrap();
-      console.log(values, res);
       if (res.success) {
         router.push("/dashboard");
         toast.success("Login Successful!");
-        console.log(localStorage.getItem("accessToken"));
       }
     } catch (error: any) {
       setError("root", {

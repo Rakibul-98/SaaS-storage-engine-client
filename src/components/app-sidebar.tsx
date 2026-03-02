@@ -1,3 +1,4 @@
+// components/app-sidebar.tsx
 "use client";
 
 import {
@@ -7,7 +8,6 @@ import {
   PackageCheck,
   ReceiptText,
   FolderTree as FolderTreeIcon,
-  Shield,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
@@ -24,21 +24,53 @@ import {
   SidebarHeader,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { NavMain } from "./nav-main";
 import { useGetFolderTreeQuery } from "../app/redux/features/folders/folderApi";
 import { logout } from "../app/redux/features/auth/authSlice";
-import { useAppSelector } from "../app/redux/hooks";
 import { toast } from "sonner";
 import FolderTree from "../app/Components/Dashboard/AppSidebar/FolderTree";
 import { baseApi } from "../app/redux/api/baseApi";
+import { useAppSelector } from "../app/redux/hooks"; // Adjust import path as needed
+import { jwtDecode } from "jwt-decode";
+
+const navigationItems = [
+  {
+    title: "Dashboard",
+    icon: Home,
+    url: "/",
+  },
+  {
+    title: "My Drive",
+    icon: HardDrive,
+    url: "/dashboard/my-drive",
+  },
+  {
+    title: "Trashed",
+    icon: Trash,
+    url: "/dashboard/trash",
+  },
+  {
+    title: "Subscriptions",
+    icon: ReceiptText,
+    url: "/dashboard/subscriptions",
+  },
+  {
+    title: "Manage Subscription",
+    icon: PackageCheck,
+    url: "/admin/manage-subscription",
+  },
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useAppSelector((state) => state.auth);
   const { data, isLoading } = useGetFolderTreeQuery();
   const dispatch = useDispatch();
   const router = useRouter();
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
 
+  // Get user from Redux store
+  const { accessToken } = useAppSelector((state) => state.auth);
+  const user = jwtDecode<{ name: string; role: string }>(accessToken || "");
   const handleLogout = () => {
     dispatch(logout());
     dispatch(baseApi.util.resetApiState());
@@ -46,47 +78,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     router.push("/login");
   };
 
-  // Base navigation items for all users
-  const baseNavigationItems = [
-    {
-      title: "Dashboard",
-      icon: Home,
-      url: "/",
-    },
-    {
-      title: "My Drive",
-      icon: HardDrive,
-      url: "/dashboard/my-drive",
-    },
-    {
-      title: "Trashed",
-      icon: Trash,
-      url: "/dashboard/trash",
-    },
-    {
-      title: "Subscriptions",
-      icon: ReceiptText,
-      url: "/dashboard/subscriptions",
-    },
-  ];
-
-  // Admin only navigation items
-  const adminNavigationItems = [
-    {
-      title: "Manage Subscription",
-      icon: PackageCheck,
-      url: "/admin/manage-subscription",
-    },
-  ];
-
-  // Combine items based on user role
-  const navigationItems = [
-    ...baseNavigationItems,
-    ...(user?.role === "ADMIN" ? adminNavigationItems : []),
-  ];
-
-  // Create a separate admin section if needed
-  const hasAdminAccess = user?.role === "ADMIN";
+  // Filter navigation items based on user role
+  const filteredNavigationItems = navigationItems.filter((item) => {
+    // Hide "Manage Subscription" if user is not ADMIN
+    if (item.title === "Manage Subscription" && user?.role !== "ADMIN") {
+      return false;
+    }
+    return true;
+  });
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -94,61 +93,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <div className="flex items-center gap-2">
           <FolderTreeIcon className="h-6 w-6 text-primary" />
           {!isCollapsed && (
-            <div className="flex flex-col">
-              <span className="font-semibold text-lg">FileManager</span>
-              {user && (
-                <span className="text-xs text-muted-foreground">
-                  {user.role === "ADMIN" ? "Administrator" : user.email}
-                </span>
-              )}
-            </div>
+            <span className="font-semibold text-lg">FileManager</span>
           )}
         </div>
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
-          <SidebarMenu>
-            {navigationItems.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  tooltip={isCollapsed ? item.title : undefined}
-                >
-                  <a href={item.url}>
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.title}</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
+        {/* Main Navigation with filtered items */}
+        <NavMain items={filteredNavigationItems} />
 
-        {hasAdminAccess && !isCollapsed && (
-          <SidebarGroup>
-            <SidebarGroupLabel className="flex items-center gap-1">
-              <Shield className="h-3 w-3" />
-              Administration
-            </SidebarGroupLabel>
-            <SidebarMenu>
-              {adminNavigationItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroup>
-        )}
-
+        {/* Folders Section */}
         <SidebarGroup>
-          <SidebarGroupLabel>All Folders</SidebarGroupLabel>
+          <SidebarGroupLabel>Folder Tree</SidebarGroupLabel>
           <div className="px-2">
             {isLoading ? (
               <div className="space-y-2 py-2">

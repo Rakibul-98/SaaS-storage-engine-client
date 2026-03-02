@@ -53,7 +53,7 @@ export default function MyDrive() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">My Drive</h1>
+        <h1 className="text-2xl font-bold">Find your folders and Files</h1>
 
         <div className="flex gap-5">
           {currentFolderId && (

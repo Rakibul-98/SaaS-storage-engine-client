@@ -27,14 +27,14 @@ export default function StatisticsCards({ stats }: any) {
   ];
 
   return (
-    <div className="grid gap-6 md:grid-cols-3">
+    <div className="flex justify-between gap-8 flex-wrap">
       {cards.map((card, i) => {
         const percent = Math.min((card.value / card.limit) * 100, 100);
 
         const Icon = card.icon;
 
         return (
-          <Card key={i} className="hover:shadow-md transition">
+          <Card key={i} className="hover:shadow-md transition flex-1">
             <CardContent className="p-6 flex justify-between items-center">
               <div>
                 <p className="text-muted-foreground text-sm">{card.title}</p>
