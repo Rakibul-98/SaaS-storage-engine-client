@@ -44,7 +44,7 @@ export const fileApi = baseApi.injectEndpoints({
       query: (id) => ({
         url: `/files/${id}/download`,
         method: "GET",
-        responseHandler: (response) => response.blob(),
+        responseHandler: (response: any) => response.blob(),
       }),
     }),
 
