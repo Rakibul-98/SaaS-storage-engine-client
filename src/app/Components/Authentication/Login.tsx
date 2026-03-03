@@ -40,13 +40,20 @@ export function Login() {
     handleSubmit,
     formState: { errors },
     setError,
+    setValue,
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "rakibul.hasan.private@gmail.com",
-      password: "1234567",
-    },
   });
+
+  const fillAdminCredentials = () => {
+    setValue("email", "admin@saas.com");
+    setValue("password", "123456");
+  };
+
+  const fillUserCredentials = () => {
+    setValue("email", "rakibul.hasan.private@gmail.com");
+    setValue("password", "1234567");
+  };
 
   const onSubmit = async (values: LoginFormValues) => {
     try {
@@ -74,6 +81,26 @@ export function Login() {
             <p className="mt-2 text-center text-sm text-gray-600">
               Enter your credentials to access your account
             </p>
+          </div>
+          <div className="flex gap-2 mt-4">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={fillAdminCredentials}
+              className="flex-1"
+            >
+              Admin
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={fillUserCredentials}
+              className="flex-1"
+            >
+              User
+            </Button>
           </div>
         </CardHeader>
 
