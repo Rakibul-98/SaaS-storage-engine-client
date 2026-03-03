@@ -127,14 +127,16 @@ export function Registration() {
           </form>
         </CardContent>
 
-        <CardFooter className="border-border border-t p-4 text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <span
-            className="cursor-pointer font-medium text-primary underline hover:no-underline"
-            onClick={() => router.push("/login")}
-          >
-            Login
-          </span>
+        <CardFooter className="border-border border-t p-4 text-sm text-muted-foreground flex justify-center">
+          <p>
+            Already have an account?{" "}
+            <span
+              className="cursor-pointer font-medium text-primary underline hover:no-underline"
+              onClick={() => router.push("/login")}
+            >
+              Login
+            </span>
+          </p>
         </CardFooter>
       </MagicCard>
     </Card>

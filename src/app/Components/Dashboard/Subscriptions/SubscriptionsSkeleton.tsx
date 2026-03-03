@@ -5,7 +5,7 @@ import SubscriptionHistorySkeleton from "./SubscriptionHistorySkeleton";
 
 export default function SubscriptionsSkeleton() {
   return (
-    <div className="p-6 space-y-5">
+    <div className="p-6 space-y-5 overflow-hidden">
       {/* Header section */}
       <div className="space-y-2">
         <Skeleton className="h-8 w-48" />

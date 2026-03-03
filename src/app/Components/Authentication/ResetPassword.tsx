@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Lock, Eye, EyeOff, CheckCircle } from "lucide-react";
+import { Eye, EyeOff, CheckCircle } from "lucide-react";
 import { useResetPasswordMutation } from "../../redux/features/auth/authApi";
 import { Button } from "../../../components/ui/button";
 
@@ -76,140 +76,130 @@ export default function ResetPassword({ token }: ResetPasswordPageProps) {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg text-center">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-            <CheckCircle className="h-6 w-6 text-green-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900">
-            Password Reset Successful!
-          </h2>
-          <p className="text-gray-600">
-            Your password has been successfully reset. You will be redirected to
-            the login page.
-          </p>
-          <div className="animate-pulse text-blue-600">Redirecting...</div>
+      <div className="border max-w-md w-full space-y-8 px-4 py-10 rounded-xl shadow-lg text-center">
+        <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+          <CheckCircle className="h-6 w-6 text-green-600" />
         </div>
+        <h2 className="text-2xl font-bold text-gray-900">
+          Password Reset Successful!
+        </h2>
+        <p className="text-gray-600">
+          Your password has been successfully reset. You will be redirected to
+          the login page.
+        </p>
+        <div className="animate-pulse text-blue-600">Redirecting...</div>
       </div>
     );
   }
 
   return (
-    <div className="">
-      <div className="max-w-sm mx-auto w-full space-y-8 p-10 rounded-xl shadow-lg">
-        <div>
-          <h2 className="text-center text-3xl font-extrabold ">
-            Reset your password
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Please enter your new password below.
-          </p>
-        </div>
+    <div className="border max-w-sm mx-auto w-full space-y-8 px-4 py-10 rounded-xl shadow-lg">
+      <div>
+        <h2 className="text-center text-3xl font-extrabold ">
+          Reset your password
+        </h2>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Please enter your new password below.
+        </p>
+      </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label
-                htmlFor="newPassword"
-                className="block text-sm font-medium text-gray-700 mb-2"
+      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <div className="space-y-4">
+          <div>
+            <label
+              htmlFor="newPassword"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              New Password
+            </label>
+            <div className="relative">
+              <input
+                id="newPassword"
+                name="newPassword"
+                type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
+                required
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="appearance-none relative block w-full pr-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md sm:text-sm"
+                placeholder="Enter new password"
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                onClick={() => setShowPassword(!showPassword)}
               >
-                New Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="newPassword"
-                  name="newPassword"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="new-password"
-                  required
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="appearance-none relative block w-full pl-10 pr-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md sm:text-sm"
-                  placeholder="Enter new password"
-                  disabled={isLoading}
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400" />
-                  )}
-                </button>
-              </div>
-              {newPassword && !validatePassword(newPassword) && (
-                <p className="mt-1 text-xs text-red-600">
-                  Password must be at least 6 characters long
-                </p>
-              )}
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5 text-gray-400" />
+                ) : (
+                  <Eye className="h-5 w-5 text-gray-400" />
+                )}
+              </button>
             </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Confirm Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
-                  autoComplete="new-password"
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="appearance-none relative block w-full pl-10 pr-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md  sm:text-sm"
-                  placeholder="Confirm new password"
-                  disabled={isLoading}
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400" />
-                  )}
-                </button>
-              </div>
-              {confirmPassword && newPassword !== confirmPassword && (
-                <p className="mt-1 text-xs text-red-600">
-                  Passwords do not match
-                </p>
-              )}
-            </div>
+            {newPassword && !validatePassword(newPassword) && (
+              <p className="mt-1 text-xs text-red-600">
+                Password must be at least 6 characters long
+              </p>
+            )}
           </div>
 
           <div>
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="group relative w-full"
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-700 mb-2"
             >
-              {isLoading ? <>Resetting...</> : "Reset Password"}
-            </Button>
+              Confirm Password
+            </label>
+            <div className="relative">
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                autoComplete="new-password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="appearance-none relative block w-full pr-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md  sm:text-sm"
+                placeholder="Confirm new password"
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="h-5 w-5 text-gray-400" />
+                ) : (
+                  <Eye className="h-5 w-5 text-gray-400" />
+                )}
+              </button>
+            </div>
+            {confirmPassword && newPassword !== confirmPassword && (
+              <p className="mt-1 text-xs text-red-600">
+                Passwords do not match
+              </p>
+            )}
           </div>
+        </div>
 
-          <div className="text-center">
-            <Link href="/login" className="text-sm ">
-              Back to Login
-            </Link>
-          </div>
-        </form>
-      </div>
+        <div>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="group relative w-full"
+          >
+            {isLoading ? <>Resetting...</> : "Reset Password"}
+          </Button>
+        </div>
+
+        <div className="text-center">
+          <Link href="/login" className="text-sm ">
+            Back to Login
+          </Link>
+        </div>
+      </form>
     </div>
   );
 }

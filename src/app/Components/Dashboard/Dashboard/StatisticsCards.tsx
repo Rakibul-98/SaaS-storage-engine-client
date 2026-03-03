@@ -35,8 +35,8 @@ export default function StatisticsCards({ stats }: any) {
 
         return (
           <Card key={i} className="hover:shadow-md transition flex-1">
-            <CardContent className="p-6 flex justify-between items-center">
-              <div>
+            <CardContent className="p-6 flex justify-between gap-3 items-center">
+              <div className="whitespace-nowrap">
                 <p className="text-muted-foreground text-sm">{card.title}</p>
                 <h3 className="text-2xl font-bold">
                   {card.value} / {card.limit}

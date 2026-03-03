@@ -21,8 +21,6 @@ export default function Dashboard() {
   const token = localStorage.getItem("accessToken");
   const user = jwtDecode<{ name: string }>(token!);
 
-  console.log(user);
-
   const stats = statsData?.data;
   const currentPackage = subData?.data?.package;
 
@@ -30,11 +28,13 @@ export default function Dashboard() {
     (stats?.foldersRemaining ?? 0) < 0 || (stats?.filesRemaining ?? 0) < 0;
   return (
     <div className="p-6 space-y-8">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Welcome back, {user?.name}</h2>
+      <div className="flex flex-col md:flex-row gap-5 justify-between">
+        <h2 className="text-2xl font-semibold">
+          Welcome back, <span className="whitespace-nowrap">{user?.name}</span>
+        </h2>
 
         <Link href="/dashboard/subscriptions">
-          <Button className="cursor-pointer">
+          <Button className="cursor-pointer w-full">
             {currentPackage ? "Upgrade Plan" : "Enroll Plan"}
           </Button>
         </Link>

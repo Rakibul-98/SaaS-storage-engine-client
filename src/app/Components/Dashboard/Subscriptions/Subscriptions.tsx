@@ -22,7 +22,7 @@ export default function Subscriptions() {
   }
 
   return (
-    <div className="p-6 space-y-5">
+    <div className="md:p-6 space-y-5">
       <div>
         <h2 className="text-2xl font-semibold">Subscription Plans</h2>
         <p className="mt-2 text-muted-foreground text-sm">

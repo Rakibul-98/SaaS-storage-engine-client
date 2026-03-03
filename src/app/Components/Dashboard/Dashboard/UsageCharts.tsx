@@ -47,7 +47,7 @@ export default function UsageCharts({ stats }: Props) {
           <CardTitle>Files & Folders Usage</CardTitle>
         </CardHeader>
 
-        <CardContent className="h-57">
+        <CardContent className="h-57 ps-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={barData}>
               <CartesianGrid strokeDasharray="3 3" />

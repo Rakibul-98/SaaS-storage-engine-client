@@ -120,17 +120,19 @@ export function Login() {
           </form>
         </CardContent>
 
-        <CardFooter className="relative border-border border-t p-4 text-sm text-muted-foreground flex">
+        <CardFooter className="relative border-border border-t p-4 text-sm text-muted-foreground flex justify-center md:justify-start">
           <Link className="absolute top-1 right-2" href="/forgot-password">
             Forgot your Password?
           </Link>
-          Don’t have an account?{" "}
-          <span
-            className="cursor-pointer font-medium text-primary underline hover:no-underline"
-            onClick={() => router.push("/registration")}
-          >
-            Register
-          </span>
+          <p className="mt-5">
+            Don’t have an account?{" "}
+            <span
+              className="cursor-pointer font-medium text-primary underline hover:no-underline"
+              onClick={() => router.push("/registration")}
+            >
+              Register
+            </span>
+          </p>
         </CardFooter>
       </MagicCard>
     </Card>

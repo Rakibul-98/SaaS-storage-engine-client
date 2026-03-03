@@ -70,7 +70,7 @@ export default function DriveItem({
     <>
       <div
         onDoubleClick={type === "folder" ? onDoubleClick : undefined}
-        className="border rounded-lg p-4 w-48 flex flex-col items-center gap-3 relative hover:shadow-md transition-shadow"
+        className="border rounded-lg p-4 w-32 md:w-48 flex flex-col items-center gap-3 relative hover:shadow-md transition-shadow"
       >
         <div className="absolute top-2 right-2">
           <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
