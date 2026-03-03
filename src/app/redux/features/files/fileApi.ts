@@ -21,7 +21,7 @@ export const fileApi = baseApi.injectEndpoints({
           body: formData,
         };
       },
-      invalidatesTags: ["File", "Folder"],
+      invalidatesTags: ["File", "Folder", "Dashboard"],
     }),
 
     getFiles: builder.query<FilesResponse, void>({

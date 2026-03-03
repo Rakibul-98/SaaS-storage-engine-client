@@ -16,7 +16,7 @@ export const folderApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["File", "Folder"],
+      invalidatesTags: ["File", "Folder", "Dashboard"],
     }),
 
     getFolders: builder.query<GetFoldersResponse, void>({

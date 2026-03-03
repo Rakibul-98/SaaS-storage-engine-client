@@ -63,7 +63,7 @@ export function Login() {
   };
 
   return (
-    <Card className="w-full max-w-sm mx-auto border-none p-0 shadow-none">
+    <Card className="w-full max-w-sm mx-auto border-none py-10 shadow-none">
       <MagicCard
         gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"}
         className="p-0"

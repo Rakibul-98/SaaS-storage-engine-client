@@ -20,7 +20,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Subscription"],
+      invalidatesTags: ["UserSubscription", "Dashboard"],
     }),
 
     getAllPackages: builder.query<GetAllPackagesResponse, void>({
@@ -51,6 +51,8 @@ export const subscriptionApi = baseApi.injectEndpoints({
       invalidatesTags: (_result, _error, { id }) => [
         "Subscription",
         { type: "Subscription", id },
+        "Dashboard",
+        "UserSubscription",
       ],
     }),
 
