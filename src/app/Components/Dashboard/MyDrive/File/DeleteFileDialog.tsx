@@ -21,7 +21,7 @@ export default function DeleteFileDialog({ file }: any) {
   const handleDelete = async () => {
     try {
       await deleteFile(file.id).unwrap();
-      toast.success("File deleted");
+      toast.success("File moved to trash.");
       setOpen(false);
     } catch (err: any) {
       toast.error(err?.data?.message || "Delete failed");

@@ -77,7 +77,7 @@ export default function Trash() {
             No files in the trash...
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="grid sm:grid-cols-2 gap-5">
             {files.map((file: any) => (
               <Card key={file.id} className="p-4 space-y-3">
                 <div className="flex items-start gap-3">

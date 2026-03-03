@@ -117,7 +117,12 @@ export default function DriveItem({
           <File size={100} className="text-gray-500" />
         )}
 
-        <span className="font-medium text-center w-full">{item.name}</span>
+        <span
+          className="font-medium text-center w-full line-clamp-1"
+          title={item.name}
+        >
+          {item.name}
+        </span>
       </div>
 
       {type === "folder" && (

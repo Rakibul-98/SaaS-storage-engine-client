@@ -1,4 +1,3 @@
-// components/app-sidebar.tsx
 "use client";
 
 import {
@@ -30,7 +29,7 @@ import { logout } from "../app/redux/features/auth/authSlice";
 import { toast } from "sonner";
 import FolderTree from "../app/Components/Dashboard/AppSidebar/FolderTree";
 import { baseApi } from "../app/redux/api/baseApi";
-import { useAppSelector } from "../app/redux/hooks"; // Adjust import path as needed
+import { useAppSelector } from "../app/redux/hooks";
 import { jwtDecode } from "jwt-decode";
 
 const navigationItems = [
@@ -68,7 +67,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
 
-  // Get user from Redux store
   const { accessToken } = useAppSelector((state) => state.auth);
   const user = jwtDecode<{ name: string; role: string }>(accessToken || "");
   const handleLogout = () => {
@@ -78,9 +76,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     router.push("/login");
   };
 
-  // Filter navigation items based on user role
   const filteredNavigationItems = navigationItems.filter((item) => {
-    // Hide "Manage Subscription" if user is not ADMIN
     if (item.title === "Manage Subscription" && user?.role !== "ADMIN") {
       return false;
     }
@@ -99,10 +95,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        {/* Main Navigation with filtered items */}
         <NavMain items={filteredNavigationItems} />
 
-        {/* Folders Section */}
         <SidebarGroup>
           <SidebarGroupLabel>Folder Tree</SidebarGroupLabel>
           <div className="px-2">
@@ -126,7 +120,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleLogout}
-              className="bg-red-500 text-white font-medium w-full flex items-center justify-center hover:bg-red-400 rounded cursor-pointer"
+              className="bg-red-500 text-white font-medium w-full flex items-center justify-center hover:bg-red-700 rounded hover:text-white cursor-pointer"
             >
               <span>Sign Out</span>
             </SidebarMenuButton>

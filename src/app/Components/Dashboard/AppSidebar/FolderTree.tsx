@@ -47,7 +47,7 @@ export default function FolderTree({
             key={folder.id}
             // onClick={() => handleFolderClick(folder.id)}
             className={cn(
-              "p-2 rounded-md transition-colors relative group",
+              "p-2 rounded-md transition-colors  relative group",
               pathname.includes(folder.id)
                 ? "bg-accent text-accent-foreground"
                 : "hover:bg-accent hover:text-accent-foreground",
@@ -105,7 +105,9 @@ export default function FolderTree({
                 )}
               />
 
-              <span className="text-sm truncate flex-1">{folder.name}</span>
+              <span className="text-sm truncate flex-1" title={folder.name}>
+                {folder.name}
+              </span>
 
               {hasChildren && (
                 <span className="text-xs text-muted-foreground px-1">
