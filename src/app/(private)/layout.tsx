@@ -53,7 +53,7 @@ export default function PrivateLayout({
   }
 
   const getPageTitle = () => {
-    if (pathname === "/") return "Dashboard";
+    if (pathname === "/") return "Home";
     if (pathname.includes("/my-drive")) return "My Drive";
     if (pathname.includes("/trash")) return "Trash";
     if (pathname.includes("/subscriptions")) return "Subscriptions";

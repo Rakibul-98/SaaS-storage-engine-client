@@ -7,6 +7,7 @@ import {
   PackageCheck,
   ReceiptText,
   FolderTree as FolderTreeIcon,
+  Monitor,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
@@ -34,9 +35,14 @@ import { jwtDecode } from "jwt-decode";
 
 const navigationItems = [
   {
-    title: "Dashboard",
+    title: "Home",
     icon: Home,
     url: "/",
+  },
+  {
+    title: "Dashboard",
+    icon: Monitor,
+    url: "/dashboard",
   },
   {
     title: "My Drive",
@@ -73,7 +79,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     dispatch(logout());
     dispatch(baseApi.util.resetApiState());
     toast.success("Logged out successfully");
-    router.push("/login");
+    router.push("/");
   };
 
   const filteredNavigationItems = navigationItems.filter((item) => {
