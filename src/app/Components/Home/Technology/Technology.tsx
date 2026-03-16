@@ -28,10 +28,6 @@ export default function Technology() {
       img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
     },
     {
-      name: "Python",
-      img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-    },
-    {
       name: "Tailwind CSS",
       img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
     },
@@ -44,25 +40,13 @@ export default function Technology() {
       img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg",
     },
     {
-      name: "Docker",
-      img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
-    },
-    {
-      name: "MongoDB",
-      img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
-    },
-    {
       name: "PostgreSQL",
       img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
     },
     {
       name: "Figma",
       img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
-    },
-    {
-      name: "Firebase",
-      img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
-    },
+    }
   ]
 
   const TechCard = ({
