@@ -6,7 +6,7 @@ import { Cloud, Shield, Zap } from 'lucide-react'
 
 export default function CTA() {
   return (
-    <div className="py-16 md:py-24 relative overflow-hidden">
+    <div className="pt-16 md:pt-24 pb-10 relative overflow-hidden">
       <BackgroundPattern />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <CommonTitle
@@ -15,7 +15,7 @@ export default function CTA() {
         />
 
         <div className="mt-12 lg:mt-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 items-center">
 
             {/* Left Content Section */}
             <div className="space-y-8">

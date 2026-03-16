@@ -65,7 +65,7 @@ export default function Technology() {
     },
   ]
 
-  const ReviewCard = ({
+  const TechCard = ({
     img,
     name,
   }: {
@@ -94,26 +94,26 @@ export default function Technology() {
   };
 
   return (
-    <div className="py-16 md:py-24 relative overflow-hidden">
+    <div id='technology' className="py-16 md:py-24 relative overflow-hidden">
       <BackgroundPattern />
       <div className="relative max-w-7xl mx-auto px-4">
         <CommonTitle title="Developer Friendly" subtitle="Built with a modern stack for easy integration." />
         <div className=" mt-12 md:mt-16 space-y-6">
           <Marquee pauseOnHover className="[--duration:20s]">
             {techs.map((tech) => (
-              <ReviewCard key={tech.name} {...tech} />
+              <TechCard key={tech.name} {...tech} />
             ))}
           </Marquee>
-          <div className='mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-3 gap-10 items-center'>
+          <div className='mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 items-center'>
             <Image
-              className=""
+              className="hidden md:block"
               src={"/assets/tach_img.png"}
               alt="Image"
               width={1000}
               height={600}
             />
             <Image
-              className="md:col-span-2"
+              className="lg:col-span-2"
               src={"/assets/saas-banner.png"}
               alt="Image"
               width={1000}

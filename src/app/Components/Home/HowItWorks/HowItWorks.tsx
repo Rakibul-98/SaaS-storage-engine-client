@@ -31,7 +31,7 @@ export default function HowItWorks() {
   ]
 
   return (
-    <section className="relative overflow-hidden py-16 md:py-24">
+    <section id='how-it-works' className="relative overflow-hidden py-16 md:py-24">
       <BackgroundPattern />
       <div className="relative max-w-7xl mx-auto px-4">
         {/* Section Header */}

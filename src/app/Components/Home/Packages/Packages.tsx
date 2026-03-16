@@ -37,7 +37,7 @@ export default function Packages() {
     },
   ]
   return (
-    <div className="py-16 md:py-24 relative overflow-hidden">
+    <div id="usage" className="py-16 md:py-24 relative overflow-hidden">
       <BackgroundPattern />
       <div className="relative max-w-7xl mx-auto px-4">
         <CommonTitle title="Perfect for All Your Storage Needs" subtitle="Ideal for developers, teams, and individuals." />

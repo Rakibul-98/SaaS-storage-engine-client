@@ -40,14 +40,14 @@ export default function Features() {
   ]
 
   return (
-    <section className=" py-16 md:py-24 relative overflow-hidden">
-      <BackgroundPattern/>
+    <section id='features' className="py-16 md:py-24 relative overflow-hidden">
+      <BackgroundPattern />
       <div className="relative max-w-7xl mx-auto px-4">
-        <CommonTitle 
-          title="File Storage Should Be Simple" 
-          subtitle="Manage your files effortlessly with our powerful features." 
+        <CommonTitle
+          title="File Storage Should Be Simple"
+          subtitle="Manage your files effortlessly with our powerful features."
         />
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mt-12 md:mt-16">
           {features.map((feature) => (
             <FeatureCard key={feature.id} feature={feature} />
