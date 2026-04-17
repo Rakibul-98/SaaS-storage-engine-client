@@ -42,7 +42,7 @@ export default function UsageCharts({ stats }: Props) {
 
   return (
     <div className="flex-1">
-      <Card>
+      <Card className="bg-transparent">
         <CardHeader>
           <CardTitle>Files & Folders Usage</CardTitle>
         </CardHeader>

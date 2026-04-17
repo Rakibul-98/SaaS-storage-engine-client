@@ -34,7 +34,7 @@ export default function StatisticsCards({ stats }: any) {
         const Icon = card.icon;
 
         return (
-          <Card key={i} className="hover:shadow-md transition flex-1">
+          <Card key={i} className="hover:shadow-md transition flex-1 bg-transparent">
             <CardContent className="p-6 flex justify-between gap-3 items-center">
               <div className="whitespace-nowrap">
                 <p className="text-muted-foreground text-sm">{card.title}</p>
