@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Menu } from "lucide-react";
@@ -27,7 +26,8 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import Image from "next/image";
 
 interface MenuItem {
   title: string;
@@ -63,7 +63,6 @@ const Navbar = ({
     title: "SaaS Storage Engine",
   },
   menu = [
-    { title: "Features", url: "#features" },
     {
       title: "How It Works",
       url: "#how-it-works",
@@ -96,10 +95,12 @@ const Navbar = ({
           <div className="flex items-center gap-6">
             {/* Logo */}
             <a href={logo.url} className="flex items-center gap-2">
-              <img
+              <Image
                 src={logo.src}
-                className="max-h-8"
                 alt={logo.alt}
+                width={120}
+                height={32}
+                className="max-h-8 w-auto"
               />
               <span className="text-lg font-semibold tracking-tighter text-[#213467]">
                 {logo.title}
@@ -131,10 +132,12 @@ const Navbar = ({
           <div className="flex items-center justify-between">
             {/* Logo */}
             <a href={logo.url} className="flex items-center gap-2">
-              <img
+              <Image
                 src={logo.src}
-                className="max-h-8 dark:invert"
                 alt={logo.alt}
+                width={120}
+                height={32}
+                className="max-h-8 w-auto"
               />
               <span className="text-lg font-semibold tracking-tighter text-[#213467]">
                 {logo.title}
@@ -150,10 +153,12 @@ const Navbar = ({
                 <SheetHeader>
                   <SheetTitle>
                     <a href={logo.url} className="flex items-center gap-2">
-                      <img
+                      <Image
                         src={logo.src}
-                        className="max-h-8 dark:invert"
                         alt={logo.alt}
+                        width={120}
+                        height={32}
+                        className="max-h-8 w-auto"
                       />
                     </a>
                   </SheetTitle>

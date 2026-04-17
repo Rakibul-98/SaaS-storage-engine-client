@@ -8,6 +8,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "../../components/app-sidebar";
 import { toast } from "sonner";
 import { jwtDecode } from "jwt-decode";
+import BackgroundPattern from "../Components/Home/BackgroundPattern";
 
 export default function PrivateLayout({
   children,
@@ -20,7 +21,7 @@ export default function PrivateLayout({
 
   useEffect(() => {
     if (!accessToken) {
-      router.replace("/");
+      router.replace("/login");
       return;
     }
 
@@ -67,11 +68,16 @@ export default function PrivateLayout({
       <div className="flex min-h-screen w-full">
         <AppSidebar />
         <main className="flex-1">
-          <div className="flex items-center gap-2 p-4 border-b sticky top-0 bg-background z-10">
+          <div className="flex items-center gap-2 p-4 border-b sticky top-0 bg-[#1e3a5f] text-secondary z-10">
             <SidebarTrigger />
             <h1 className="text-xl font-semibold">{getPageTitle()}</h1>
           </div>
-          <div className="p-6">{children}</div>
+          <div className="relative p-6">
+            <BackgroundPattern />
+            <div className="relative min-h-[calc(100vh-110px)]">
+              {children}
+            </div>
+          </div>
         </main>
       </div>
     </SidebarProvider>

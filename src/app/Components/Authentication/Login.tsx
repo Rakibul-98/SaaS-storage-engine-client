@@ -45,14 +45,14 @@ export function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  const fillAdminCredentials = () => {
-    setValue("email", "admin@saas.com");
-    setValue("password", "123456");
+  const fillUserCredentials = () => {
+    setValue("email", "demo@saas.com");
+    setValue("password", "Demo@12345");
   };
 
-  const fillUserCredentials = () => {
-    setValue("email", "rakibul.hasan.private@gmail.com");
-    setValue("password", "1234567");
+  const fillAdminCredentials = () => {
+    setValue("email", "admin@saas.com");
+    setValue("password", "Admin@12345");
   };
 
   const onSubmit = async (values: LoginFormValues) => {
