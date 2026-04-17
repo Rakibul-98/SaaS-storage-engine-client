@@ -77,7 +77,7 @@ export function Login() {
       >
         <CardHeader className="border-border border-b p-8">
           <div>
-            <h2 className="text-center text-3xl font-extrabold ">Login</h2>
+            <h2 className="text-center text-3xl font-extrabold text-primary ">Login</h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Enter your credentials to access your account
             </p>

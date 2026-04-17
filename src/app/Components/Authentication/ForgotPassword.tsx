@@ -90,7 +90,7 @@ export default function ForgotPassword() {
   return (
     <div className="border max-w-sm mx-auto w-full space-y-8 px-8 py-10 rounded-xl shadow-lg bg-white ">
       <div>
-        <h2 className="mt-6 text-center text-2xl font-extrabold">
+        <h2 className="mt-6 text-center text-2xl font-extrabold text-primary">
           Forgot your password?
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">

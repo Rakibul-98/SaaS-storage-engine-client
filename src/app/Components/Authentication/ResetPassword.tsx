@@ -95,7 +95,7 @@ export default function ResetPassword({ token }: ResetPasswordPageProps) {
   return (
     <div className="border max-w-sm mx-auto w-full space-y-8 px-8 py-10 rounded-xl shadow-lg bg-white">
       <div>
-        <h2 className="text-center text-3xl font-extrabold ">
+        <h2 className="text-center text-3xl font-extrabold text-primary ">
           Reset your password
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">

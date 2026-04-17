@@ -64,7 +64,7 @@ export function Registration() {
       >
         <CardHeader className="border-border border-b p-8">
           <div>
-            <h2 className="text-center text-3xl font-extrabold ">Register</h2>
+            <h2 className="text-center text-3xl font-extrabold text-primary ">Register</h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Create your account to start using the platform
             </p>
