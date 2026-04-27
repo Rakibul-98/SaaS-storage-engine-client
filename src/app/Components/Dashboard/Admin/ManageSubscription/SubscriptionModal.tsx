@@ -27,6 +27,7 @@ const subscriptionSchema = z.object({
   maxLevels: z.number().min(1, "Must be at least 1"),
   allowedFileType: z.array(z.string()).min(1, "Select at least one file type"),
   maxFileSizeMB: z.number().min(1, "Must be at least 1"),
+  storageQuotaMB: z.number().min(1, "Must be at least 1"),
   fileLimit: z.number().min(1, "Must be at least 1"),
   filesPerFolder: z.number().min(1, "Must be at least 1"),
 });
@@ -56,6 +57,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
       maxLevels: 1,
       allowedFileType: [],
       maxFileSizeMB: 1,
+      storageQuotaMB: 100,
       fileLimit: 1,
       filesPerFolder: 1,
     },

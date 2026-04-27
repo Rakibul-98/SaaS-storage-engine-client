@@ -45,14 +45,14 @@ export function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  const fillAdminCredentials = () => {
-    setValue("email", "admin@saas.com");
-    setValue("password", "123456");
+  const fillUserCredentials = () => {
+    setValue("email", "demo@saas.com");
+    setValue("password", "Demo@12345");
   };
 
-  const fillUserCredentials = () => {
-    setValue("email", "rakibul.hasan.private@gmail.com");
-    setValue("password", "1234567");
+  const fillAdminCredentials = () => {
+    setValue("email", "admin@saas.com");
+    setValue("password", "Admin@12345");
   };
 
   const onSubmit = async (values: LoginFormValues) => {
@@ -70,14 +70,14 @@ export function Login() {
   };
 
   return (
-    <Card className="w-full max-w-sm mx-auto border-none py-10 shadow-none">
+    <Card className="w-full max-w-sm mx-auto border-none shadow-none p-0">
       <MagicCard
         gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"}
         className="p-0"
       >
-        <CardHeader className="border-border border-b p-4">
+        <CardHeader className="border-border border-b p-8">
           <div>
-            <h2 className="text-center text-3xl font-extrabold ">Login</h2>
+            <h2 className="text-center text-3xl font-extrabold text-primary ">Login</h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Enter your credentials to access your account
             </p>
@@ -104,7 +104,7 @@ export function Login() {
           </div>
         </CardHeader>
 
-        <CardContent className="p-4">
+        <CardContent className="p-8">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-4">
               {/* Email */}
@@ -147,8 +147,8 @@ export function Login() {
           </form>
         </CardContent>
 
-        <CardFooter className="relative border-border border-t p-4 text-sm text-muted-foreground flex justify-center md:justify-start">
-          <Link className="absolute top-1 right-2" href="/forgot-password">
+        <CardFooter className="relative border-border border-t p-8 text-sm text-muted-foreground flex justify-center md:justify-start">
+          <Link className="absolute top-1 right-8" href="/forgot-password">
             Forgot your Password?
           </Link>
           <p className="mt-5">

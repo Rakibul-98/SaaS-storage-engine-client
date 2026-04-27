@@ -40,11 +40,10 @@ export default function SubscriptionCard({
 
   return (
     <Card
-      className={`relative flex flex-col h-full transition-all ${
-        isActive
-          ? "border-primary bg-blue-500/5 shadow-lg scale-[1.05]"
-          : "hover:shadow-md"
-      }`}
+      className={`relative flex flex-col h-full transition-all bg-transparent ${isActive
+        ? "border-primary bg-blue-500/5 shadow-lg scale-[1.05]"
+        : "hover:shadow-md"
+        }`}
     >
       {isActive && <Badge className="absolute top-3 right-3">Active</Badge>}
 

@@ -1,4 +1,3 @@
-// components/nav-main.tsx
 import { ChevronRight } from "lucide-react";
 import {
   Collapsible,
@@ -7,7 +6,6 @@ import {
 } from "@/components/ui/collapsible";
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -134,7 +132,6 @@ export function NavMain({ items }: { items: NavItem[] }) {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Features</SidebarGroupLabel>
       <RenderMenuItems items={items} isCollapsed={isCollapsed} />
     </SidebarGroup>
   );

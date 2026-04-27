@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Folder, File, MoreVertical } from "lucide-react";
+import { Folder, MoreVertical, FileText, FileImage, FileVideo, FileAudio, File } from "lucide-react";
 import { useState } from "react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +14,21 @@ import {
 import UpdateFolderModal from "./Folder/UpdateFolderModal";
 import DeleteFolderConfirmation from "./Folder/DeleteFolderConfirmation";
 import FileActions from "./File/FileActions";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../../components/ui/tooltip";
+import ShareLinkModal from "./File/ShareLinkModal";
+import { Badge } from "../../../../components/ui/badge";
+import Image from "next/image";
+import { FileItem } from "../../../redux/features/files/file.type";
+import { fetchAndDownloadFile } from "../../../../lib/utils";
+
+const FILE_TYPE_ICON: Record<string, React.ElementType> = {
+  IMAGE: FileImage,
+  VIDEO: FileVideo,
+  AUDIO: FileAudio,
+  PDF: FileText,
+  DOCUMENT: FileText,
+  OTHER: File,
+};
 
 interface DriveItemProps {
   item: any;
@@ -26,6 +42,7 @@ export default function DriveItem({
   onDoubleClick,
 }: DriveItemProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const closeDropdown = () => {
@@ -33,32 +50,11 @@ export default function DriveItem({
   };
 
   const handleDownload = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/files/${item.id}/download`,
-        {
-          method: "GET",
-          credentials: "include",
-        },
-      );
-
-      const blob = await response.blob();
-      const contentType =
-        response.headers.get("content-type") || "application/octet-stream";
-
-      const fileBlob = new Blob([blob], { type: contentType });
-      const url = window.URL.createObjectURL(fileBlob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = item.name;
-      a.click();
-
-      window.URL.revokeObjectURL(url);
-      closeDropdown();
-    } catch {
-      console.error("Download failed");
-    }
+    await fetchAndDownloadFile(
+      process.env.NEXT_PUBLIC_API_BASE_URL!,
+      item.id,
+      closeDropdown
+    );
   };
 
   const handleDeleteClick = () => {
@@ -66,64 +62,105 @@ export default function DriveItem({
     closeDropdown();
   };
 
+  const TypeIcon = type === "file" ? (FILE_TYPE_ICON[item.type] ?? File) : Folder;
+
   return (
     <>
-      <div
-        onDoubleClick={type === "folder" ? onDoubleClick : undefined}
-        className="border rounded-lg p-4 w-32 md:w-48 flex flex-col items-center gap-3 relative hover:shadow-md transition-shadow"
-      >
-        <div className="absolute top-2 right-2">
-          <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-            <DropdownMenuTrigger asChild>
-              <button className="p-1 rounded hover:bg-gray-100">
-                <MoreVertical size={18} />
-              </button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent align="end">
-              {type === "folder" ? (
-                <>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    <UpdateFolderModal folder={item} onClose={closeDropdown} />
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem
-                    className="text-red-500 cursor-pointer"
-                    onSelect={(e) => e.preventDefault()}
-                    onClick={handleDeleteClick}
-                  >
-                    Delete
-                  </DropdownMenuItem>
-                </>
-              ) : (
-                <>
-                  <DropdownMenuItem
-                    onSelect={(e) => e.preventDefault()}
-                    onClick={handleDownload}
-                  >
-                    Download
-                  </DropdownMenuItem>
-
-                  <FileActions file={item} onClose={closeDropdown} />
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-
-        {type === "folder" ? (
-          <Folder size={100} className="text-blue-500" />
-        ) : (
-          <File size={100} className="text-gray-500" />
-        )}
-
-        <span
-          className="font-medium text-center w-full line-clamp-1"
-          title={item.name}
+      <TooltipProvider delayDuration={600}>
+        <div
+          onDoubleClick={type === "folder" ? onDoubleClick : undefined}
+          className="border rounded-lg p-4 w-32 md:w-48 flex flex-col items-center gap-3 relative shadow hover:shadow-md transition-shadow"
         >
-          {item.name}
-        </span>
-      </div>
+          <div className="absolute top-2 right-2">
+            <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+              <DropdownMenuTrigger asChild>
+                <button className="p-1 rounded cursor-pointer">
+                  <MoreVertical size={15} />
+                </button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent className="bg-muted" align="end">
+                {type === "folder" ? (
+                  <>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <UpdateFolderModal folder={item} onClose={closeDropdown} />
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      className="text-red-500 cursor-pointer"
+                      onSelect={(e) => e.preventDefault()}
+                      onClick={handleDeleteClick}
+                    >
+                      Delete
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem onClick={handleDownload}>Download</DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={(e) => e.preventDefault()}
+                      onClick={() => { setShareModalOpen(true); closeDropdown(); }}
+                    >
+                      Share Link
+                    </DropdownMenuItem>
+
+                    <FileActions file={item} onClose={closeDropdown} />
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <div className="w-[80%] h-20 flex items-center justify-center rounded-lg overflow-hidden">
+            {type === "file" && (item as FileItem).thumbnailUrl ? (
+              <div className="relative w-full h-full">
+                <Image
+                  src={(item as FileItem).thumbnailUrl!}
+                  alt={item.name}
+                  fill
+                  className="object-cover"
+                  sizes="80px"
+                />
+              </div>
+            ) : (
+              <TypeIcon
+                size={80}
+                className={type === "folder" ? "text-blue-500" : "text-muted-foreground"}
+              />
+            )}
+          </div>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="text-sm font-medium text-center w-full line-clamp-2 leading-tight" title={item.name}>
+                {item.name}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent side="bottom"><p>{item.name}</p></TooltipContent>
+          </Tooltip>
+
+          {type === "file" && (item as FileItem).aiTags?.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-1 w-full">
+              {(item as FileItem).aiTags.slice(0, 2).map((tag) => (
+                <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0 h-4">
+                  {tag}
+                </Badge>
+              ))}
+              {(item as FileItem).aiTags.length > 2 && (
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4">
+                  +{(item as FileItem).aiTags.length - 2}
+                </Badge>
+              )}
+            </div>
+          )}
+
+          {type === "file" && (
+            <span className="text-[10px] text-muted-foreground">
+              {(item.size / (1024 * 1024)).toFixed(1)} MB
+            </span>
+          )}
+        </div>
+      </TooltipProvider>
 
       {type === "folder" && (
         <DeleteFolderConfirmation
@@ -133,6 +170,13 @@ export default function DriveItem({
             closeDropdown();
           }}
           folder={item}
+        />
+      )}
+      {type === "file" && (
+        <ShareLinkModal
+          open={shareModalOpen}
+          onClose={() => setShareModalOpen(false)}
+          file={item}
         />
       )}
     </>

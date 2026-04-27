@@ -28,7 +28,7 @@ export default function ForgotPassword() {
         setIsSubmitted(true);
         toast.success(
           response.message ||
-            "If your email exists, you will receive a reset link",
+          "If your email exists, you will receive a reset link",
         );
       }
     } catch (error: any) {
@@ -40,7 +40,7 @@ export default function ForgotPassword() {
 
   if (isSubmitted) {
     return (
-      <div className="border max-w-sm mx-auto w-full space-y-8 px-6 py-10 rounded-xl shadow-lg">
+      <div className="max-w-sm mx-auto w-full space-y-8 px-6 py-10 rounded-xl shadow-lg bg-white">
         <div className="text-center">
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
             <svg
@@ -77,7 +77,7 @@ export default function ForgotPassword() {
         <div className="mt-6">
           <Link
             href="/login"
-            className="w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium  bg-gray-50 hover:bg-gray-100 "
+            className="w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium hover:bg-gray-100 "
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Login
@@ -88,9 +88,9 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="border max-w-sm mx-auto w-full space-y-8 px-4 py-10 rounded-xl shadow-lg">
+    <div className="border max-w-sm mx-auto w-full space-y-8 px-8 py-10 rounded-xl shadow-lg bg-white ">
       <div>
-        <h2 className="mt-6 text-center text-2xl font-extrabold">
+        <h2 className="mt-6 text-center text-2xl font-extrabold text-primary">
           Forgot your password?
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">

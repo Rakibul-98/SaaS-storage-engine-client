@@ -57,23 +57,23 @@ export function Registration() {
   };
 
   return (
-    <Card className="w-full max-w-sm mx-auto border-none py-10 shadow-none">
+    <Card className="w-full max-w-sm mx-auto border-none shadow-none p-0">
       <MagicCard
         gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"}
         className="p-0"
       >
-        <CardHeader className="border-border border-b p-4">
+        <CardHeader className="border-border border-b p-8">
           <div>
-            <h2 className="text-center text-3xl font-extrabold ">Register</h2>
+            <h2 className="text-center text-3xl font-extrabold text-primary ">Register</h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Create your account to start using the platform
             </p>
           </div>
         </CardHeader>
 
-        <CardContent className="p-4">
+        <CardContent className="p-8">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid gap-4">
+            <div className="grid gap-8">
               {/* Name */}
               <div className="grid gap-2">
                 <Label htmlFor="name">Full Name</Label>
@@ -127,7 +127,7 @@ export function Registration() {
           </form>
         </CardContent>
 
-        <CardFooter className="border-border border-t p-4 text-sm text-muted-foreground flex justify-center">
+        <CardFooter className="border-border border-t p-8 text-sm text-muted-foreground flex justify-center">
           <p>
             Already have an account?{" "}
             <span

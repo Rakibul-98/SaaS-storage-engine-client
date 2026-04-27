@@ -15,7 +15,7 @@ export default function DriveGrid({
   onFolderDoubleClick,
 }: DriveGridProps) {
   return (
-    <div className="flex flex-wrap gap-5">
+    <div className="flex flex-wrap items-start gap-5">
       {folders.map((folder) => (
         <DriveItem
           key={folder.id}

@@ -29,9 +29,15 @@ import {
   usePermanentDeleteFileMutation,
   useRestoreFileMutation,
 } from "../../../redux/features/files/fileApi";
-import { File } from "lucide-react";
+import { FileText, FileImage, FileVideo, FileAudio, File } from "lucide-react";
 import { toast } from "sonner";
 import TrashSkeleton from "./TrashSkeleton";
+import Image from "next/image";
+import { Badge } from "../../../../components/ui/badge";
+
+const TYPE_ICON: Record<string, React.ElementType> = {
+  IMAGE: FileImage, VIDEO: FileVideo, AUDIO: FileAudio, PDF: FileText, DOCUMENT: FileText, OTHER: File,
+};
 
 export default function Trash() {
   const { data, isLoading } = useGetTrashFilesQuery();
@@ -65,147 +71,139 @@ export default function Trash() {
     }
   };
 
+  const FileThumb = ({ file }: { file: any }) => {
+    const Icon = TYPE_ICON[file.type] ?? File;
+    if (file.thumbnailUrl) {
+      return (
+        <div className="relative h-9 w-9 rounded-lg overflow-hidden">
+          <Image src={file.thumbnailUrl} alt={file.name} fill className="object-cover" sizes="36px" />
+        </div>
+      );
+    }
+    return (
+      <div className="p-1.5 bg-muted rounded-lg">
+        <Icon className="h-5 w-5 text-muted-foreground" />
+      </div>
+    );
+  };
+
   if (isLoading) return <TrashSkeleton />;
 
   return (
     <div className="p-0 md:p-6 space-y-4 md:space-y-6">
-      <div className="block md:hidden space-y-4">
-        <h2 className="text-lg font-semibold">Trash</h2>
+      <h2 className="text-2xl font-bold px-4 md:px-0">Trash</h2>
 
+      <div className="block md:hidden space-y-3 px-4">
         {files.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            No files in the trash...
+          <div className="flex flex-col items-center py-16 text-muted-foreground gap-2">
+            <div className="text-5xl">🗑️</div>
+            <p className="font-medium">Trash is empty</p>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 gap-5">
-            {files.map((file: any) => (
-              <Card key={file.id} className="p-4 space-y-3">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-muted rounded-lg shrink-0">
-                    <File className="h-5 w-5" />
-                  </div>
+          files.map((file: any) => (
+            <Card key={file.id} className="p-4 space-y-3">
+              <div className="flex items-start gap-3">
+                <FileThumb file={file} />
 
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium truncate">{file.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {file.type} • {(file.size / (1024 * 1024)).toFixed(2)} MB
-                    </p>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium truncate">{file.name}</p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <Badge variant="outline" className="text-[10px] h-4">{file.type}</Badge>
+                    <span className="text-xs text-muted-foreground">
+                      {(file.size / (1024 * 1024)).toFixed(2)} MB
+                    </span>
                   </div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div>
-                    <p className="text-muted-foreground">Folder</p>
-                    <p className="truncate">{file.folder?.name || "Root"}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Deleted</p>
-                    <p>{new Date(file.updatedAt).toLocaleDateString()}</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 pt-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => handleRestore(file.id)}
-                    disabled={restoreLoading}
-                  >
-                    {restoreLoading ? "Restoring..." : "Restore"}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    className="flex-1"
-                    onClick={() => setDeleteId(file.id)}
-                    disabled={permanentDeleteLoading}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </div>
+              </div>
+              <div className="text-xs text-muted-foreground">
+                Deleted {new Date(file.updatedAt).toLocaleDateString()} · {file.folder?.name || "Root"}
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Button size="sm" variant="outline" onClick={() => handleRestore(file.id)} disabled={restoreLoading}>
+                  {restoreLoading ? "Restoring..." : "Restore"}
+                </Button>
+                <Button size="sm" variant="destructive" onClick={() => setDeleteId(file.id)} disabled={permanentDeleteLoading}>
+                  Delete
+                </Button>
+              </div>
+            </Card>
+          ))
         )}
       </div>
 
-      <div className="hidden md:block space-y-4">
-        <h2 className="text-lg font-semibold">Trash</h2>
+      <div className="hidden md:block rounded-md border overflow-hidden">
+        <Table>
+          <TableHeader className="bg-muted">
+            <TableRow>
+              <TableHead className="w-12"></TableHead>
+              <TableHead>File</TableHead>
+              <TableHead>Folder</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Size</TableHead>
+              <TableHead>Deleted At</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
 
-        <div className="rounded-md border overflow-hidden">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader className="bg-muted">
-                <TableRow>
-                  <TableHead className="w-12"></TableHead>
-                  <TableHead>File</TableHead>
-                  <TableHead>Folder</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Size</TableHead>
-                  <TableHead>Deleted At</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
+          <TableBody>
+            {files.length === 0 && (
+              <TableRow>
+                <TableCell
+                  colSpan={7}
+                  className="text-center py-6 text-muted-foreground"
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="text-4xl">🗑️</span>
+                    <p>Trash is empty</p>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
 
-              <TableBody>
-                {files.length === 0 && (
-                  <TableRow>
-                    <TableCell
-                      colSpan={7}
-                      className="text-center py-6 text-muted-foreground"
+            {files.map((file: any) => (
+              <TableRow key={file.id}>
+                <TableCell className="p-3">
+                  <div className="p-1 bg-muted rounded-md w-fit">
+                    <File className="h-4 w-4" />
+                  </div>
+                </TableCell>
+                <TableCell className="font-medium max-w-50 truncate">
+                  {file.name}
+                </TableCell>
+                <TableCell className="max-w-37.5 truncate">
+                  {file.folder?.name || "Root"}
+                </TableCell>
+                <TableCell>{file.type}</TableCell>
+                <TableCell className="whitespace-nowrap">
+                  {(file.size / (1024 * 1024)).toFixed(2)} MB
+                </TableCell>
+                <TableCell className="whitespace-nowrap">
+                  {new Date(file.updatedAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell className="text-right whitespace-nowrap">
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleRestore(file.id)}
+                      disabled={restoreLoading}
                     >
-                      No files in the trash...
-                    </TableCell>
-                  </TableRow>
-                )}
-
-                {files.map((file: any) => (
-                  <TableRow key={file.id}>
-                    <TableCell className="p-3">
-                      <div className="p-1 bg-muted rounded-md w-fit">
-                        <File className="h-4 w-4" />
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-medium max-w-50 truncate">
-                      {file.name}
-                    </TableCell>
-                    <TableCell className="max-w-37.5 truncate">
-                      {file.folder?.name || "Root"}
-                    </TableCell>
-                    <TableCell>{file.type}</TableCell>
-                    <TableCell className="whitespace-nowrap">
-                      {(file.size / (1024 * 1024)).toFixed(2)} MB
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap">
-                      {new Date(file.updatedAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell className="text-right whitespace-nowrap">
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleRestore(file.id)}
-                          disabled={restoreLoading}
-                        >
-                          {restoreLoading ? "Restoring" : "Restore"}
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => setDeleteId(file.id)}
-                          disabled={permanentDeleteLoading}
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
+                      {restoreLoading ? "Restoring" : "Restore"}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => setDeleteId(file.id)}
+                      disabled={permanentDeleteLoading}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
 
       {/* Alert Dialog - same for both views */}

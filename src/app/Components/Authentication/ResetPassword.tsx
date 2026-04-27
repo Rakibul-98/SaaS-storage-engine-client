@@ -76,7 +76,7 @@ export default function ResetPassword({ token }: ResetPasswordPageProps) {
 
   if (isSuccess) {
     return (
-      <div className="border max-w-md w-full space-y-8 px-4 py-10 rounded-xl shadow-lg text-center">
+      <div className="border max-w-md w-full space-y-8 px-8 py-10 rounded-xl shadow-lg text-center bg-white">
         <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
           <CheckCircle className="h-6 w-6 text-green-600" />
         </div>
@@ -93,9 +93,9 @@ export default function ResetPassword({ token }: ResetPasswordPageProps) {
   }
 
   return (
-    <div className="border max-w-sm mx-auto w-full space-y-8 px-4 py-10 rounded-xl shadow-lg">
+    <div className="border max-w-sm mx-auto w-full space-y-8 px-8 py-10 rounded-xl shadow-lg bg-white">
       <div>
-        <h2 className="text-center text-3xl font-extrabold ">
+        <h2 className="text-center text-3xl font-extrabold text-primary ">
           Reset your password
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">

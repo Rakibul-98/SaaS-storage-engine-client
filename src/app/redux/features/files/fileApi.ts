@@ -5,6 +5,11 @@ import {
   SingleFileResponse,
   UploadFilePayload,
   UpdateFilePayload,
+  CreateShareLinkPayload,
+  ShareLinkResponse,
+  ActivityLogResponse,
+  SearchFilesParams,
+  SharedFileResponse,
 } from "./file.type";
 
 export const fileApi = baseApi.injectEndpoints({
@@ -14,38 +19,30 @@ export const fileApi = baseApi.injectEndpoints({
         const formData = new FormData();
         formData.append("file", file);
         formData.append("folderId", folderId);
-
-        return {
-          url: "/files/upload",
-          method: "POST",
-          body: formData,
-        };
+        return { url: "/files/upload", method: "POST", body: formData };
       },
       invalidatesTags: ["File", "Folder", "Dashboard"],
     }),
 
-    getFiles: builder.query<FilesResponse, void>({
-      query: () => ({
-        url: "/files",
+    getFiles: builder.query<FilesResponse, { folderId: string }>({
+      query: ({ folderId }) => ({
+        url: `/files?folderId=${folderId}`,
         method: "GET",
       }),
       providesTags: ["Folder", "File"],
+    }),
+
+    searchFiles: builder.query<FilesResponse, SearchFilesParams>({
+      query: ({ q, page = 1, limit = 20 }) => ({
+        url: `/files/search?q=${encodeURIComponent(q)}&page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: ["File"],
     }),
 
     getSingleFile: builder.query<SingleFileResponse, string>({
-      query: (id) => ({
-        url: `/files/${id}`,
-        method: "GET",
-      }),
+      query: (id) => ({ url: `/files/${id}`, method: "GET" }),
       providesTags: ["Folder", "File"],
-    }),
-
-    downloadFile: builder.query<Blob, string>({
-      query: (id) => ({
-        url: `/files/${id}/download`,
-        method: "GET",
-        responseHandler: (response: any) => response.blob(),
-      }),
     }),
 
     updateFile: builder.mutation<any, UpdateFilePayload>({
@@ -58,35 +55,60 @@ export const fileApi = baseApi.injectEndpoints({
     }),
 
     deleteFile: builder.mutation<any, string>({
-      query: (id) => ({
-        url: `/files/${id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["File", "Folder"],
+      query: (id) => ({ url: `/files/${id}`, method: "DELETE" }),
+      invalidatesTags: ["File", "Folder", "Dashboard"],
     }),
 
     permanentDeleteFile: builder.mutation<any, string>({
-      query: (id) => ({
-        url: `/files/${id}/permanent`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["File", "Folder"],
+      query: (id) => ({ url: `/files/${id}/permanent`, method: "DELETE" }),
+      invalidatesTags: ["File", "Folder", "Dashboard"],
     }),
 
     restoreFile: builder.mutation<any, string>({
-      query: (id) => ({
-        url: `/files/${id}/restore`,
-        method: "PATCH",
-      }),
-      invalidatesTags: ["File", "Folder"],
+      query: (id) => ({ url: `/files/${id}/restore`, method: "PATCH" }),
+      invalidatesTags: ["File", "Folder", "Dashboard"],
     }),
 
     getTrashFiles: builder.query<FilesResponse, void>({
-      query: () => ({
-        url: "/files/trash",
+      query: () => ({ url: "/files/trash", method: "GET" }),
+      providesTags: ["Folder", "File"],
+    }),
+
+    // Share links
+    createShareLink: builder.mutation<
+      ShareLinkResponse,
+      CreateShareLinkPayload
+    >({
+      query: ({ id, ...body }) => ({
+        url: `/files/${id}/share`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["File"],
+    }),
+
+    revokeShareLink: builder.mutation<any, string>({
+      query: (token) => ({
+        url: `/files/share/${token}/revoke`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["File"],
+    }),
+
+    getSharedFile: builder.query<SharedFileResponse, string>({
+      query: (token) => ({ url: `/files/share/${token}`, method: "GET" }),
+    }),
+
+    // Activity log
+    getActivityLog: builder.query<
+      ActivityLogResponse,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page = 1, limit = 10 } = {}) => ({
+        url: `/files/activity?page=${page}&limit=${limit}`,
         method: "GET",
       }),
-      providesTags: ["Folder", "File"],
+      providesTags: ["File"],
     }),
   }),
 });
@@ -94,11 +116,15 @@ export const fileApi = baseApi.injectEndpoints({
 export const {
   useUploadFileMutation,
   useGetFilesQuery,
+  useSearchFilesQuery,
   useGetSingleFileQuery,
-  useDownloadFileQuery,
   useUpdateFileMutation,
   useDeleteFileMutation,
   usePermanentDeleteFileMutation,
   useRestoreFileMutation,
   useGetTrashFilesQuery,
+  useCreateShareLinkMutation,
+  useRevokeShareLinkMutation,
+  useGetSharedFileQuery,
+  useGetActivityLogQuery,
 } = fileApi;
