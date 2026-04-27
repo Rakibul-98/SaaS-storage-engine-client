@@ -3,12 +3,19 @@ import { jwtDecode } from "jwt-decode";
 import { AuthState } from "./auth.types";
 import { baseApi } from "../../api/baseApi";
 
+const getInitialToken = (key: string): string | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+
 const initialState: AuthState = {
   user: null,
-  accessToken:
-    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null,
-  refreshToken:
-    typeof window !== "undefined" ? localStorage.getItem("refreshToken") : null,
+  accessToken: getInitialToken("accessToken"),
+  refreshToken: getInitialToken("refreshToken"),
 };
 
 const authSlice = createSlice({
