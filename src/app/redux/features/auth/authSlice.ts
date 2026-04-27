@@ -3,10 +3,20 @@ import { jwtDecode } from "jwt-decode";
 import { AuthState } from "./auth.types";
 import { baseApi } from "../../api/baseApi";
 
-const getInitialToken = (key: string): string | null => {
+const getStoredToken = (key: string): string | null => {
   if (typeof window === "undefined") return null;
   try {
-    return localStorage.getItem(key);
+    const token = localStorage.getItem(key);
+    if (!token) return null;
+    // Validate token is not expired before using it
+    if (key === "accessToken") {
+      const decoded = jwtDecode<{ exp?: number }>(token);
+      if (decoded.exp && decoded.exp * 1000 < Date.now()) {
+        localStorage.removeItem(key);
+        return null;
+      }
+    }
+    return token;
   } catch {
     return null;
   }
@@ -14,8 +24,8 @@ const getInitialToken = (key: string): string | null => {
 
 const initialState: AuthState = {
   user: null,
-  accessToken: getInitialToken("accessToken"),
-  refreshToken: getInitialToken("refreshToken"),
+  accessToken: getStoredToken("accessToken"),
+  refreshToken: getStoredToken("refreshToken"),
 };
 
 const authSlice = createSlice({
@@ -27,18 +37,27 @@ const authSlice = createSlice({
 
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
-      state.user = jwtDecode(accessToken);
 
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
+      try {
+        state.user = jwtDecode(accessToken);
+      } catch {
+        state.user = null;
+      }
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+      }
     },
 
     logout: (state) => {
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+      }
       baseApi.util.resetApiState();
     },
   },

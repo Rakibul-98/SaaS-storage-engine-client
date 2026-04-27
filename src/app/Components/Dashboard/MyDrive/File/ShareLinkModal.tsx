@@ -5,7 +5,10 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Copy, Check, Link2, Clock, Eye } from "lucide-react";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +18,10 @@ import {
   useCreateShareLinkMutation,
   useRevokeShareLinkMutation,
 } from "../../../../redux/features/files/fileApi";
-import { FileItem, ShareLink } from "../../../../redux/features/files/file.type";
+import {
+  FileItem,
+  ShareLink,
+} from "../../../../redux/features/files/file.type";
 
 interface Props {
   open: boolean;
@@ -29,15 +35,18 @@ export default function ShareLinkModal({ open, onClose, file }: Props) {
   const [copied, setCopied] = useState(false);
   const [generatedLink, setGeneratedLink] = useState<ShareLink | null>(null);
 
-  const [createShareLink, { isLoading: creating }] = useCreateShareLinkMutation();
-  const [revokeShareLink, { isLoading: revoking }] = useRevokeShareLinkMutation();
+  const [createShareLink, { isLoading: creating }] =
+    useCreateShareLinkMutation();
+  const [revokeShareLink, { isLoading: revoking }] =
+    useRevokeShareLinkMutation();
 
   const existingLinks = file.shareLinks?.filter((l) => l.isActive) ?? [];
   const activeLink = generatedLink ?? existingLinks[0] ?? null;
 
-  const shareUrl = activeLink
-    ? `${window.location.origin}/share/${activeLink.token}`
-    : null;
+  // SSR-safe origin
+  const origin =
+    typeof window !== "undefined" ? window.location.origin : "";
+  const shareUrl = activeLink ? `${origin}/share/${activeLink.token}` : null;
 
   const handleCreate = async () => {
     try {
@@ -71,8 +80,15 @@ export default function ShareLinkModal({ open, onClose, file }: Props) {
     }
   };
 
+  const handleClose = () => {
+    setGeneratedLink(null);
+    setExpiresInHours("");
+    setMaxViews("");
+    onClose();
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -81,7 +97,6 @@ export default function ShareLinkModal({ open, onClose, file }: Props) {
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Active link display */}
           {shareUrl ? (
             <div className="space-y-3">
               <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
@@ -90,8 +105,17 @@ export default function ShareLinkModal({ open, onClose, file }: Props) {
                   value={shareUrl}
                   className="border-0 bg-transparent text-sm p-0 h-auto focus-visible:ring-0"
                 />
-                <Button size="icon" variant="ghost" onClick={handleCopy} className="shrink-0 h-8 w-8">
-                  {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={handleCopy}
+                  className="shrink-0 h-8 w-8"
+                >
+                  {copied ? (
+                    <Check className="h-4 w-4 text-green-600" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
               <div className="flex items-center gap-2 flex-wrap text-xs text-muted-foreground">
@@ -108,15 +132,17 @@ export default function ShareLinkModal({ open, onClose, file }: Props) {
                   </span>
                 )}
                 {!activeLink?.expiresAt && !activeLink?.maxViews && (
-                  <Badge variant="secondary" className="text-xs">No expiry</Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    No expiry
+                  </Badge>
                 )}
               </div>
               <Button
                 variant="destructive"
                 size="sm"
                 className="w-full"
-                onClick={() => handleRevoke(activeLink!.token)}
-                disabled={revoking}
+                onClick={() => activeLink && handleRevoke(activeLink.token)}
+                disabled={revoking || !activeLink}
               >
                 {revoking ? "Revoking..." : "Revoke Link"}
               </Button>
@@ -124,7 +150,8 @@ export default function ShareLinkModal({ open, onClose, file }: Props) {
           ) : (
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">
-                Create a shareable link for this file. You can optionally set an expiry or view limit.
+                Create a shareable link for this file. You can optionally set an
+                expiry or view limit.
               </p>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -148,7 +175,11 @@ export default function ShareLinkModal({ open, onClose, file }: Props) {
                   />
                 </div>
               </div>
-              <Button className="w-full" onClick={handleCreate} disabled={creating}>
+              <Button
+                className="w-full"
+                onClick={handleCreate}
+                disabled={creating}
+              >
                 {creating ? "Creating..." : "Generate Link"}
               </Button>
             </div>
