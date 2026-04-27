@@ -95,6 +95,7 @@ export default function ManageSubscriptions() {
         maxLevels: singlePackageData.data.maxLevels,
         allowedFileType: singlePackageData.data.allowedFileType,
         maxFileSizeMB: singlePackageData.data.maxFileSizeMB,
+        storageQuotaMB: (singlePackageData.data as any).storageQuotaMB ?? 100,
         fileLimit: singlePackageData.data.fileLimit,
         filesPerFolder: singlePackageData.data.filesPerFolder,
       };
