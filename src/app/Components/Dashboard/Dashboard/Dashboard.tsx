@@ -32,7 +32,7 @@ export default function Dashboard() {
   const isStorageWarning = (stats?.storage.usedPercent ?? 0) >= 80;
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-6 space-y-8 overflow-hidden">
       <div className="flex flex-col md:flex-row gap-5 justify-between">
         <div>
           <h2 className="text-2xl font-semibold">
@@ -40,7 +40,7 @@ export default function Dashboard() {
           </h2>
           {currentPackage && (
             <div className="flex items-center gap-2 mt-1">
-              <Badge variant="secondary">{currentPackage.name} Plan</Badge>
+              <Badge variant="default">{currentPackage.name} Plan</Badge>
               {stats?.subscription.isActive && (
                 <Badge className="bg-green-100 text-green-700 hover:bg-green-100">Active</Badge>
               )}
@@ -73,7 +73,7 @@ export default function Dashboard() {
 
       <StatisticsCards stats={stats} />
 
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col lg:flex-row gap-8">
         <UsageCharts stats={stats} />
 
         {currentPackage && (

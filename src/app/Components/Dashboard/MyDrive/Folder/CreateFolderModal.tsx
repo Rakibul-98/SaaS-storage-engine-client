@@ -108,7 +108,7 @@ export default function CreateFolderModal({
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="bg-muted">
         <DialogHeader>
           <DialogTitle>Create New Folder</DialogTitle>
         </DialogHeader>
@@ -133,13 +133,14 @@ export default function CreateFolderModal({
             <Controller
               name="parentId"
               control={control}
+
               render={({ field }) => (
                 <Select
                   onValueChange={(value) =>
                     field.onChange(value === "root" ? null : value)
                   }
                   value={field.value === null ? "root" : field.value}
-                  disabled={true} // Always disabled since it's set dynamically
+                  disabled={true}
                 >
                   <SelectTrigger className="w-full" id="parentId">
                     <SelectValue placeholder="Select a parent folder" />

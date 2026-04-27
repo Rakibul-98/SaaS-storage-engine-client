@@ -135,7 +135,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleLogout}
-              className="bg-red-500 text-white font-medium w-full flex items-center justify-center hover:bg-red-700 rounded hover:text-white cursor-pointer"
+              className="bg-red-600 text-white font-medium w-full flex items-center justify-center hover:bg-red-700 rounded hover:text-white cursor-pointer"
             >
               <span>Sign Out</span>
             </SidebarMenuButton>

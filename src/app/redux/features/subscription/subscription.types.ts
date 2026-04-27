@@ -6,6 +6,7 @@ export interface CreateSubscriptionPackagePayload {
   maxLevels: number;
   allowedFileType: AllowedFileType[];
   maxFileSizeMB: number;
+  storageQuotaMB: number;
   fileLimit: number;
   filesPerFolder: number;
 }
@@ -17,6 +18,7 @@ export interface SubscriptionPackage {
   maxLevels: number;
   allowedFileType: AllowedFileType[];
   maxFileSizeMB: number;
+  storageQuotaMB: number;
   fileLimit: number;
   filesPerFolder: number;
   isDeleted: boolean;
