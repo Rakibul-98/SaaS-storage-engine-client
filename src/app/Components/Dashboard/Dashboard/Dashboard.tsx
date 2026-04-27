@@ -28,8 +28,8 @@ export default function Dashboard() {
   const currentPackage = subData?.data?.package;
 
   const isOverLimit =
-    (stats?.files.remaining ?? 1) < 0 || (stats?.folders.remaining ?? 1) < 0;
-  const isStorageWarning = (stats?.storage.usedPercent ?? 0) >= 80;
+    (stats?.files?.remaining ?? 1) < 0 || (stats?.folders?.remaining ?? 1) < 0;
+  const isStorageWarning = (stats?.storage?.usedPercent ?? 0) >= 80;
 
   return (
     <div className="p-6 space-y-8 overflow-hidden">
