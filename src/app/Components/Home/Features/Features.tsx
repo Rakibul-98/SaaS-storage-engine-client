@@ -1,7 +1,7 @@
 import React from 'react'
 import CommonTitle from '../shared/CommonTitle'
 import FeatureCard from './FeatureCard'
-import { CloudUpload, FileUp, FolderSymlink, ShieldCheck } from 'lucide-react'
+import { ChartBar, CloudUpload, Coins, DatabaseZap, FileUp, FolderSymlink, ShieldCheck, Trash } from 'lucide-react'
 import BackgroundPattern from '../BackgroundPattern';
 
 export interface Feature {
@@ -36,6 +36,30 @@ export default function Features() {
       icon: CloudUpload,
       title: "Cloud Access",
       description: "Access your files from anywhere, on any device, with seamless cloud synchronization and real-time updates.",
+    },
+    {
+      id: 5,
+      icon: Trash,
+      title: "Trash & restore",
+      description: "Soft delete with full trash management. Restore individual items or permanently delete.",
+    },
+    {
+      id: 6,
+      icon: ChartBar,
+      title: "Storage analytics",
+      description: "Visual charts showing storage consumed, file count, folder count, and plan limits, so users always know where they stand.",
+    },
+    {
+      id: 7,
+      icon: Coins,
+      title: "JWT authentication",
+      description: "Access + refresh token strategy. Email verification on registration. Forgot password with time-limited reset links.",
+    },
+    {
+      id: 8,
+      icon: DatabaseZap,
+      title: "Neon serverless DB",
+      description: "PostgreSQL on Neon with the Prisma serverless adapter for efficient connection handling.",
     },
   ]
 

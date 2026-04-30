@@ -30,7 +30,7 @@ export default function Banner() {
                 Store, Organize and Manage Files in the Cloud
               </h1>
               <h1 className="mt-6 max-w-lg text-lg leading-[1.2]! lg:text-xl">
-                A modern SRAS platform to upload. organize, and manage your files securely from anywhere.
+                A modern SAAS platform to upload. organize, and manage your files securely from anywhere.
               </h1>
               <WordRotate
                 className="font-medium my-5 text-2xl"

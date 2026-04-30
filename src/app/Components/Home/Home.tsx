@@ -10,6 +10,7 @@ import HowItWorks from './HowItWorks/HowItWorks'
 import Packages from './Packages/Packages'
 import Technology from './Technology/Technology'
 import { ArrowUpToLine } from 'lucide-react'
+import EnforcementLogic from './EnforcementLogic/EnforcementLogic'
 
 export default function Home() {
   const [showButton, setShowButton] = useState(false)
@@ -38,11 +39,11 @@ export default function Home() {
   }
   return (
     <div className='relative'>
-
       <Banner />
       <Features />
       <HowItWorks />
       <Demo />
+      <EnforcementLogic />
       <Packages />
       <Technology />
       <CTA />
