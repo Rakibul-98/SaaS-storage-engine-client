@@ -64,6 +64,10 @@ const Navbar = ({
   },
   menu = [
     {
+      title: "Features",
+      url: "#features",
+    },
+    {
       title: "How It Works",
       url: "#how-it-works",
     },
@@ -74,6 +78,10 @@ const Navbar = ({
     {
       title: "Technology",
       url: "#technology",
+    },
+    {
+      title: "CTA",
+      url: "#cta",
     },
   ],
   auth = {

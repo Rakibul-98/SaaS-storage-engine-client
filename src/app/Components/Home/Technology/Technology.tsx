@@ -97,8 +97,8 @@ export default function Technology() {
               height={600}
             />
             <Image
-              className="lg:col-span-2"
-              src={"/assets/saas-banner.png"}
+              className="lg:col-span-2 rounded-md"
+              src={"/assets/dashboard.png"}
               alt="Image"
               width={1000}
               height={600}

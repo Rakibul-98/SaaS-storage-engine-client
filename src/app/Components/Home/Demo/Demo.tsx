@@ -9,10 +9,17 @@ export default function Demo() {
       <div className="relative max-w-7xl mx-auto px-4">
         <CommonTitle title="Intuitive & Powerful File Management" subtitle="See the SaaS Storage Engine in action." />
         <div className="md:flex gap-6 mt-12 md:mt-16 space-y-6">
-          <figure className="aspect-video ">
+          <figure className="aspect-square space-y-6">
             <Image
               className="shadow-xl border-2 rounded-md"
-              src={"/assets/saas-package.png"}
+              src={"/assets/login.png"}
+              alt="Image"
+              width={1000}
+              height={600}
+            />
+            <Image
+              className="shadow-xl border-2 rounded-md"
+              src={"/assets/dashboard.png"}
               alt="Image"
               width={1000}
               height={600}
@@ -21,14 +28,14 @@ export default function Demo() {
           <div className="space-y-6">
             <Image
               className="shadow-xl border-2 rounded-md"
-              src={"/assets/saas-dashboard.png"}
+              src={"/assets/packages.png"}
               alt="Image"
               width={1000}
               height={600}
             />
             <Image
               className="shadow-xl border-2 rounded-md"
-              src={"/assets/saas-files.png"}
+              src={"/assets/drive.png"}
               alt="Image"
               width={1000}
               height={600}

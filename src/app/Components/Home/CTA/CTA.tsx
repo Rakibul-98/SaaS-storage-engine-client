@@ -3,6 +3,7 @@ import BackgroundPattern from '../BackgroundPattern'
 import CommonTitle from '../shared/CommonTitle'
 import Image from 'next/image'
 import { Cloud, Shield, Zap } from 'lucide-react'
+import Link from 'next/link'
 
 export default function CTA() {
   return (
@@ -68,7 +69,48 @@ export default function CTA() {
             </div>
           </div>
         </div>
+
       </div>
+      <section id='cta' className="px-4 mt-16 md:mt-24 relative bg-[#111827] text-center text-white py-20">
+        <CommonTitle
+          title="See the enforcement in action"
+          subtitle="Try uploading files beyond your plan's limit, or moving folders into cyclic positions. The API rejects it every time."
+        />
+
+        <div className="bg-white/5 backdrop-blur-md rounded-md px-8 py-5 my-8 max-w-4xl mx-auto flex flex-col lg:flex-row gap-4">
+          <div className="bg-white/10 px-6 py-4 rounded-md font-mono text-sm flex justify-center items-center lg:w-1/2">
+            Admin → <span className="ms-2 text-teal-300 font-medium">auto-filled on button click</span>
+          </div>
+          <div className="bg-white/10 px-6 py-4 rounded-md font-mono text-sm flex justify-center items-center lg:w-1/2">
+            User → <span className="ms-2 text-teal-300 font-medium"> auto-filled on button click</span>
+          </div>
+        </div>
+
+        <div className="flex gap-4 justify-center flex-wrap mt-8">
+          <Link
+            href="/login"
+            className="px-8 py-3 rounded-lg font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-300 hover:scale-105"
+          >
+            Try live demo
+          </Link>
+          <Link
+            href="https://github.com/Rakibul-98/SaaS-storage-engine-client"
+            className="px-8 py-3 rounded-lg font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-300 hover:scale-105"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View frontend code
+          </Link>
+          <Link
+            href="https://github.com/Rakibul-98/SaaS-storage-engine-server"
+            className="px-8 py-3 rounded-lg font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-300 hover:scale-105"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View backend code
+          </Link>
+        </div>
+      </section>
     </div>
   )
 }
